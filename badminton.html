@@ -1,0 +1,1202 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>羽球接發球大師 · 實戰反應與戰術互動遊戲</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Teko:wght@500;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bCourt: {
+                            green: '#0b6623',
+                            line: '#f8fafc',
+                            mat: '#14532d',
+                            accent: '#22c55e'
+                        },
+                        neonYellow: '#eab308',
+                        neonCyan: '#06b6d4',
+                        badmintonDark: '#090d16'
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'Inter', 'sans-serif'],
+                        score: ['Teko', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+            user-select: none;
+        }
+        .score-num {
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 1px;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow {
+            box-shadow: 0 0 25px -5px rgba(34, 197, 94, 0.4);
+        }
+        .key-badge {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-slate-950/90 backdrop-blur border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg">
+                    🏸
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold tracking-wide text-white flex items-center gap-2">
+                        羽球接發球大師
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">PRO EDITION</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Badminton Serve & Return Interactive Trainer</p>
+                </div>
+            </div>
+
+            <!-- Mode Switch Tabs -->
+            <div class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm font-semibold">
+                <button onclick="switchGameTab('tab-game')" id="btn-tab-game" class="px-3 sm:px-4 py-2 rounded-xl bg-emerald-600 text-white shadow-md transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-gamepad"></i> 實戰挑戰
+                </button>
+                <button onclick="switchGameTab('tab-tactics')" id="btn-tab-tactics" class="px-3 sm:px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-chalkboard-user"></i> 戰術沙盤
+                </button>
+                <button onclick="switchGameTab('tab-rules')" id="btn-tab-rules" class="px-3 sm:px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-open"></i> 規則與要領
+                </button>
+                <button id="soundToggle" onclick="toggleAudio()" class="p-2 ml-1 text-slate-400 hover:text-emerald-400 rounded-lg transition" title="聲音開關">
+                    <i class="fa-solid fa-volume-high text-base" id="soundIcon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-6 w-full">
+        <!-- ==================== TAB 1: INTERACTIVE GAME ==================== -->
+        <section id="tab-game" class="space-y-4">
+            
+            <!-- Game Top Scoreboard & Control Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <!-- Score Card -->
+                <div class="glass-panel rounded-2xl p-3 sm:p-4 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] text-slate-400 uppercase font-semibold">總得分 (Score)</div>
+                        <div id="uiScore" class="text-3xl sm:text-4xl font-bold text-emerald-400 score-num leading-none">0</div>
+                    </div>
+                    <div class="text-2xl text-emerald-500/50"><i class="fa-solid fa-trophy"></i></div>
+                </div>
+
+                <!-- Combo & Reaction -->
+                <div class="glass-panel rounded-2xl p-3 sm:p-4 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] text-slate-400 uppercase font-semibold">連擊 / 反應</div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="uiCombo" class="text-2xl sm:text-3xl font-bold text-amber-400 score-num leading-none">0x</span>
+                            <span id="uiReactionTime" class="text-xs font-mono text-cyan-300">-- ms</span>
+                        </div>
+                    </div>
+                    <div class="text-2xl text-amber-500/50"><i class="fa-solid fa-bolt"></i></div>
+                </div>
+
+                <!-- Match Progress -->
+                <div class="glass-panel rounded-2xl p-3 sm:p-4 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] text-slate-400 uppercase font-semibold">回合 (Rounds)</div>
+                        <div id="uiRound" class="text-2xl sm:text-3xl font-bold text-white score-num leading-none">0 / 10</div>
+                    </div>
+                    <div class="text-2xl text-slate-600"><i class="fa-solid fa-bullseye"></i></div>
+                </div>
+
+                <!-- Difficulty & Match Type -->
+                <div class="glass-panel rounded-2xl p-3 sm:p-4 flex flex-col justify-center gap-1.5">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">賽制：</span>
+                        <select id="matchTypeSelect" onchange="changeMatchType(this.value)" class="bg-slate-800 border border-slate-700 text-emerald-400 rounded px-2 py-0.5 text-xs font-semibold focus:outline-none">
+                            <option value="doubles">雙打接發 (主流快攻)</option>
+                            <option value="singles">單打接發 (全場拉吊)</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">難度：</span>
+                        <select id="difficultySelect" onchange="changeDifficulty(this.value)" class="bg-slate-800 border border-slate-700 text-amber-400 rounded px-2 py-0.5 text-xs font-semibold focus:outline-none">
+                            <option value="normal">標準 (Normal)</option>
+                            <option value="hard">國手級 (Hard)</option>
+                            <option value="easy">新手練習 (Easy)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Court Canvas Stage Area -->
+            <div class="relative w-full rounded-3xl overflow-hidden glass-panel border border-slate-700/80 shadow-2xl bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-2 sm:p-4 flex flex-col items-center">
+                
+                <!-- Match Status HUD Overlay -->
+                <div class="w-full flex justify-between items-center px-2 py-1 text-xs text-slate-400 border-b border-slate-800/80 mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span id="gameStatusText" class="text-emerald-300 font-semibold">準備就緒，點擊「開始對決」</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="serveHintText" class="text-amber-300 font-mono">等待發球...</span>
+                    </div>
+                </div>
+
+                <!-- Badminton Court Canvas -->
+                <div class="relative w-full max-w-4xl aspect-[16/9] sm:aspect-[16/8.5] bg-slate-950 rounded-2xl overflow-hidden border-2 border-slate-700/60 shadow-inner flex items-center justify-center">
+                    <canvas id="badmintonCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+
+                    <!-- Start / Game Over Overlay Screen -->
+                    <div id="gameOverlay" class="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-20">
+                        <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-500 to-cyan-500 text-slate-950 flex items-center justify-center text-3xl mb-4 shadow-xl">
+                            🏸
+                        </div>
+                        <h2 id="overlayTitle" class="text-2xl sm:text-4xl font-black text-white mb-2">
+                            羽球接發球實戰反應訓練
+                        </h2>
+                        <p id="overlaySubtitle" class="text-slate-300 max-w-md text-xs sm:text-sm leading-relaxed mb-6">
+                            觀察對手發球姿態與飛行軌跡！在最佳擊球時機點（進入擊球圈瞬間），選擇最合適的<b>撲球、放網、推平抽或殺球</b>回擊！
+                        </p>
+                        
+                        <!-- High score breakdown -->
+                        <div id="overlayStats" class="hidden grid-cols-3 gap-3 w-full max-w-md bg-slate-900/90 p-4 rounded-xl border border-slate-700 mb-6 text-xs">
+                            <div>
+                                <span class="text-slate-400 block">總得分</span>
+                                <span id="statFinalScore" class="text-2xl font-bold text-emerald-400 score-num">0</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block">最高連擊</span>
+                                <span id="statMaxCombo" class="text-2xl font-bold text-amber-400 score-num">0</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block">平均反應時速</span>
+                                <span id="statAvgReaction" class="text-lg font-bold text-cyan-400 font-mono">0 ms</span>
+                            </div>
+                        </div>
+
+                        <button onclick="startNewGame()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-black text-base rounded-2xl shadow-xl transition transform hover:scale-105 flex items-center gap-2">
+                            <i class="fa-solid fa-play"></i> <span id="startBtnText">開始實戰對決</span>
+                        </button>
+                    </div>
+
+                    <!-- Hit Quality Feedback Badge -->
+                    <div id="hitFeedback" class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all duration-300 text-center z-10">
+                        <div id="hitFeedbackText" class="text-3xl sm:text-5xl font-black tracking-widest uppercase italic drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
+                            PERFECT!
+                        </div>
+                        <div id="hitFeedbackSub" class="text-xs sm:text-sm font-bold text-white mt-1 px-3 py-1 bg-black/60 rounded-full inline-block">
+                            快速搶網撲殺
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Shot Selection Controller (Buttons + Hotkeys) -->
+                <div class="w-full max-w-4xl mt-3 space-y-2">
+                    
+                    <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+                        <span>⚡ <b>接發球回擊決策庫</b> (點擊按鈕或按鍵盤對應快捷鍵)：</span>
+                        <span class="text-[11px] text-emerald-400 hidden sm:inline"><i class="fa-solid fa-keyboard mr-1"></i>支援鍵盤快捷鍵</span>
+                    </div>
+
+                    <!-- Shot Action Buttons Grid -->
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                        
+                        <!-- 1. 撲球 (Net Kill/Push) -->
+                        <button onclick="triggerPlayerShot('kill')" id="btn-shot-kill" class="shot-btn bg-emerald-950/80 hover:bg-emerald-900 border-2 border-emerald-500/60 hover:border-emerald-400 p-2 sm:p-3 rounded-2xl flex flex-col items-center justify-between text-center transition group relative">
+                            <div class="flex items-center justify-between w-full">
+                                <span class="key-badge text-emerald-300">Q</span>
+                                <i class="fa-solid fa-bolt text-emerald-400 text-xs"></i>
+                            </div>
+                            <div class="my-1">
+                                <div class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-300">封網撲殺</div>
+                                <div class="text-[10px] text-emerald-400/80">剋：過高前發球</div>
+                            </div>
+                        </button>
+
+                        <!-- 2. 放網 (Net Drop) -->
+                        <button onclick="triggerPlayerShot('drop')" id="btn-shot-drop" class="shot-btn bg-slate-900 hover:bg-slate-800 border-2 border-slate-700 hover:border-cyan-400 p-2 sm:p-3 rounded-2xl flex flex-col items-center justify-between text-center transition group relative">
+                            <div class="flex items-center justify-between w-full">
+                                <span class="key-badge text-cyan-300">W</span>
+                                <i class="fa-solid fa-feather text-cyan-400 text-xs"></i>
+                            </div>
+                            <div class="my-1">
+                                <div class="text-xs sm:text-sm font-bold text-white group-hover:text-cyan-300">搓放網前</div>
+                                <div class="text-[10px] text-cyan-400/80">貼網短球回放</div>
+                            </div>
+                        </button>
+
+                        <!-- 3. 勾對角 (Cross Net) -->
+                        <button onclick="triggerPlayerShot('cross')" id="btn-shot-cross" class="shot-btn bg-slate-900 hover:bg-slate-800 border-2 border-slate-700 hover:border-blue-400 p-2 sm:p-3 rounded-2xl flex flex-col items-center justify-between text-center transition group relative">
+                            <div class="flex items-center justify-between w-full">
+                                <span class="key-badge text-blue-300">E</span>
+                                <i class="fa-solid fa-arrow-turn-down text-blue-400 text-xs"></i>
+                            </div>
+                            <div class="my-1">
+                                <div class="text-xs sm:text-sm font-bold text-white group-hover:text-blue-300">勾對角網前</div>
+                                <div class="text-[10px] text-blue-400/80">調動對手重心</div>
+                            </div>
+                        </button>
+
+                        <!-- 4. 殺球 (Smash) -->
+                        <button onclick="triggerPlayerShot('smash')" id="btn-shot-smash" class="shot-btn bg-rose-950/80 hover:bg-rose-900 border-2 border-rose-500/60 hover:border-rose-400 p-2 sm:p-3 rounded-2xl flex flex-col items-center justify-between text-center transition group relative">
+                            <div class="flex items-center justify-between w-full">
+                                <span class="key-badge text-rose-300">A</span>
+                                <i class="fa-solid fa-fire text-rose-400 text-xs"></i>
+                            </div>
+                            <div class="my-1">
+                                <div class="text-xs sm:text-sm font-bold text-white group-hover:text-rose-300">重扣殺球</div>
+                                <div class="text-[10px] text-rose-400/80">剋：偷後場/高遠</div>
+                            </div>
+                        </button>
+
+                        <!-- 5. 平抽推底 (Drive/Push) -->
+                        <button onclick="triggerPlayerShot('drive')" id="btn-shot-drive" class="shot-btn bg-amber-950/80 hover:bg-amber-900 border-2 border-amber-500/60 hover:border-amber-400 p-2 sm:p-3 rounded-2xl flex flex-col items-center justify-between text-center transition group relative">
+                            <div class="flex items-center justify-between w-full">
+                                <span class="key-badge text-amber-300">S</span>
+                                <i class="fa-solid fa-forward text-amber-400 text-xs"></i>
+                            </div>
+                            <div class="my-1">
+                                <div class="text-xs sm:text-sm font-bold text-white group-hover:text-amber-300">平抽推兩腰</div>
+                                <div class="text-[10px] text-amber-400/80">快速穿越壓迫</div>
+                            </div>
+                        </button>
+
+                        <!-- 6. 挑高遠球 (Lift/Clear) -->
+                        <button onclick="triggerPlayerShot('lift')" id="btn-shot-lift" class="shot-btn bg-slate-900 hover:bg-slate-800 border-2 border-slate-700 hover:border-purple-400 p-2 sm:p-3 rounded-2xl flex flex-col items-center justify-between text-center transition group relative">
+                            <div class="flex items-center justify-between w-full">
+                                <span class="key-badge text-purple-300">D</span>
+                                <i class="fa-solid fa-arrow-up-right-dots text-purple-400 text-xs"></i>
+                            </div>
+                            <div class="my-1">
+                                <div class="text-xs sm:text-sm font-bold text-white group-hover:text-purple-300">挑高遠球</div>
+                                <div class="text-[10px] text-purple-400/80">防守重置節奏</div>
+                            </div>
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <!-- ==================== TAB 2: TACTICAL SIMULATOR ==================== -->
+        <section id="tab-tactics" class="hidden space-y-6">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-700">
+                <div class="max-w-3xl mb-6">
+                    <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 text-xs rounded-full border border-cyan-500/30 font-semibold">
+                        TACTICAL SANDBOX
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mt-2">接發球戰術落點與第三拍預判沙盤</h2>
+                    <p class="text-slate-400 text-sm mt-1">
+                        在羽球雙打與單打對決中，「接發球直接決定了前三拍的主動權」。點擊下方對手發球類型，觀察最優回球路線與戰術目的。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Left: Tactic Options -->
+                    <div class="space-y-3">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">選擇對手發球情境：</div>
+                        
+                        <button onclick="setTacticsScenario(0)" id="tactic-btn-0" class="w-full text-left p-4 rounded-2xl border bg-emerald-950/60 border-emerald-500 text-white transition flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">1</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-emerald-200">雙打：反手前場發小球（正中/T點）</h4>
+                                <p class="text-xs text-slate-400 mt-1">現代雙打最主流發球，弧度緊貼球網白邊。</p>
+                            </div>
+                        </button>
+
+                        <button onclick="setTacticsScenario(1)" id="tactic-btn-1" class="w-full text-left p-4 rounded-2xl border bg-slate-900 border-slate-700 hover:border-slate-500 text-slate-300 transition flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-sm">2</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">雙打：突擊偷後場平高球 (Flick)</h4>
+                                <p class="text-xs text-slate-400 mt-1">趁接發球員重心過度前傾時，快速發向後場邊角。</p>
+                            </div>
+                        </button>
+
+                        <button onclick="setTacticsScenario(2)" id="tactic-btn-2" class="w-full text-left p-4 rounded-2xl border bg-slate-900 border-slate-700 hover:border-slate-500 text-slate-300 transition flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-sm">3</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">單打：正手底線高遠發球 (High Serve)</h4>
+                                <p class="text-xs text-slate-400 mt-1">發至單打最深底線，逼迫對手退至底線拉開空間。</p>
+                            </div>
+                        </button>
+
+                        <button onclick="setTacticsScenario(3)" id="tactic-btn-3" class="w-full text-left p-4 rounded-2xl border bg-slate-900 border-slate-700 hover:border-slate-500 text-slate-300 transition flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-sm">4</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">發追身球 / 側邊小球 (Body/Wide Serve)</h4>
+                                <p class="text-xs text-slate-400 mt-1">直逼接發球員持拍腋下或外側邊線，封鎖揮拍空間。</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Right: Diagram & Tactical Analysis Card -->
+                    <div class="lg:col-span-2 bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                                <div>
+                                    <h3 id="tacTitle" class="text-lg font-bold text-emerald-300">雙打 T 點小球最佳接發策略</h3>
+                                    <span id="tacSub" class="text-xs text-slate-400">第一原則：高點搶網、迫使對手起高球</span>
+                                </div>
+                                <span id="tacTag" class="px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-bold rounded-lg border border-emerald-500/30">主動進攻</span>
+                            </div>
+
+                            <!-- Tactical Diagram Box -->
+                            <div class="my-6 p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row items-center gap-6">
+                                <div class="w-full sm:w-1/2 aspect-[4/3] bg-emerald-950/40 rounded-lg border-2 border-emerald-600/40 relative p-3 flex flex-col justify-between overflow-hidden">
+                                    <div class="w-full h-1 bg-white/80 my-auto shadow"></div>
+                                    <div class="absolute top-2 left-1/2 -translate-x-1/2 text-[10px] text-slate-400">對手發球方</div>
+                                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] text-emerald-400 font-bold">我方接發球位</div>
+                                    
+                                    <div id="tacDiagramInner" class="absolute inset-0 flex items-center justify-center">
+                                        <i class="fa-solid fa-arrow-up-long text-emerald-400 text-4xl transform -rotate-12 animate-pulse"></i>
+                                    </div>
+                                </div>
+
+                                <div class="w-full sm:w-1/2 space-y-3 text-xs leading-relaxed">
+                                    <div>
+                                        <b class="text-emerald-400">推薦回擊 1（最優解）：</b>
+                                        <p id="tacChoice1" class="text-slate-300 mt-0.5">高點撲推追身或兩腰空檔，直接奪取第 3 拍殺球機會。</p>
+                                    </div>
+                                    <div>
+                                        <b class="text-cyan-400">推薦回擊 2（穩妥解）：</b>
+                                        <p id="tacChoice2" class="text-slate-300 mt-0.5">貼網放短或反勾對角，破壞發球員往前封網的預判。</p>
+                                    </div>
+                                    <div>
+                                        <b class="text-rose-400">禁忌誤區：</b>
+                                        <p id="tacMistake" class="text-slate-300 mt-0.5">半場起高球！這將直接給予對方後場搭檔重殺致命一擊。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400 flex items-center gap-3">
+                            <i class="fa-solid fa-lightbulb text-amber-400 text-lg"></i>
+                            <span><b>口訣提煉：</b> 接發球重心前傾半步，持拍手置於胸前，雙眼盯準出球瞬間，寧前勿後搶高點！</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: RULES & KNOWLEDGE ==================== -->
+        <section id="tab-rules" class="hidden space-y-6">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-700">
+                <div class="max-w-3xl mb-6">
+                    <span class="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30 font-semibold">
+                        OFFICIAL BWF RULES
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mt-2">羽球發球與接發球界線圖解</h2>
+                    <p class="text-slate-400 text-sm mt-1">
+                        單打與雙打的發球有效區域截然不同！掌握界線規則是避免判斷出界與踩線失誤的基本功。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Single Rules Card -->
+                    <div class="bg-slate-900/90 p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-emerald-400 flex items-center gap-2">
+                                <i class="fa-solid fa-user"></i> 單打發球有效區 (Singles)
+                            </h3>
+                            <span class="text-xs px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">窄而長</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            • <b>寬度：</b> 以內側邊線為界（兩邊側邊外線為出界）。<br>
+                            • <b>長度：</b> 必須過前發球線，且<b>一直延伸到最底部的底線</b>。<br>
+                            • <b>戰術特點：</b> 可以大量使用高遠球與平高球壓迫底線，調動單打防守範圍。
+                        </p>
+                        <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800 text-xs text-emerald-200">
+                            💡 <b>單打記憶法：</b> 「瘦長型」球場，兩側不出界，後場到底線。
+                        </div>
+                    </div>
+
+                    <!-- Double Rules Card -->
+                    <div class="bg-slate-900/90 p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-cyan-400 flex items-center gap-2">
+                                <i class="fa-solid fa-users"></i> 雙打發球有效區 (Doubles)
+                            </h3>
+                            <span class="text-xs px-2.5 py-1 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">寬而短</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            • <b>寬度：</b> 算至最外側邊線（全寬）。<br>
+                            • <b>長度：</b> 必須過前發球線，但<b>後場僅到「雙打後發球線」</b>（到底線算出界）。<br>
+                            • <b>戰術特點：</b> 90% 以上採用網前小球，後場偷球為出其不意的戰術奇兵。
+                        </p>
+                        <div class="p-3 rounded-xl bg-cyan-950/40 border border-cyan-800 text-xs text-cyan-200">
+                            💡 <b>雙打記憶法：</b> 「寬矮型」球場，全寬可用，後場短一格。
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 4 Golden Rules for Serve Return -->
+                <div class="mt-8 pt-6 border-t border-slate-800">
+                    <h3 class="text-base font-bold text-white mb-4">🔥 職業球員接發球四大黃金要領：</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
+                        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                            <div class="font-bold text-amber-400 mb-1">1. 舉拍過網頂</div>
+                            <p class="text-slate-400 leading-relaxed">持拍手手肘微抬，拍頭高度與網帶齊平，節省引拍時間。</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                            <div class="font-bold text-emerald-400 mb-1">2. 步法啟動蹬地</div>
+                            <p class="text-slate-400 leading-relaxed">左腳在前（右手持拍者），腳後跟微離地，隨時向前蹬跨步撲網。</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                            <div class="font-bold text-cyan-400 mb-1">3. 落點打空檔兩腰</div>
+                            <p class="text-slate-400 leading-relaxed">接發小球時，推向對手前場與後場球員交界處的「兩腰盲區」。</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                            <div class="font-bold text-purple-400 mb-1">4. 眼神假動作欺敵</div>
+                            <p class="text-slate-400 leading-relaxed">做出撲球姿勢引誘對手後退，最後一刻收力停頓改放網前網帶。</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-6 text-slate-500 text-xs text-center font-mono">
+        <div class="max-w-7xl mx-auto px-4 space-y-1">
+            <p class="text-slate-400 font-sans">羽球接發球大師 · 互動訓練講堂與遊戲</p>
+            <p>Badminton Serve & Return Interactive Training Platform</p>
+        </div>
+    </footer>
+    <!-- Game Engine Script -->
+    <script>
+        // ==================== AUDIO & SOUND SYNTHESIZER ====================
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    audioCtx = new AudioContext();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            initAudioContext();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'smash' || type === 'kill') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(420, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
+                gain.gain.setValueAtTime(0.7, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.12);
+            } else if (type === 'drop' || type === 'cross') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(700, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } else if (type === 'serve') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(350, now);
+                osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'fault') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.25);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } else if (type === 'perfect') {
+                [523.25, 659.25, 783.99].forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + i * 0.04);
+                    gain.gain.setValueAtTime(0.2, now + i * 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + i * 0.04);
+                    osc.stop(now + 0.35);
+                });
+            }
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('soundIcon');
+            if (soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high text-emerald-400';
+                playSound('perfect');
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-slate-500';
+            }
+        }
+
+        // ==================== TAB NAVIGATION ====================
+        function switchGameTab(tabId) {
+            playSound('drop');
+            ['tab-game', 'tab-tactics', 'tab-rules'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+                const btn = document.getElementById('btn-' + id);
+                if (btn) {
+                    btn.className = 'px-3 sm:px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 transition flex items-center gap-1.5';
+                }
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = 'px-3 sm:px-4 py-2 rounded-xl bg-emerald-600 text-white shadow-md transition flex items-center gap-1.5';
+            }
+        }
+
+        // ==================== TACTICS SANDBOX DATA ====================
+        const tacticsData = [
+            {
+                title: '雙打 T 點小球最佳接發策略',
+                sub: '第一原則：高點搶網、迫使對手起高球',
+                tag: '主動進攻',
+                choice1: '高點撲推追身或兩腰空檔，直接奪取第 3 拍殺球機會。',
+                choice2: '貼網放短或反勾對角，破壞發球員往前封網的預判。',
+                mistake: '半場起高球！這將直接給予對方後場搭檔重殺致命一擊。',
+                diagramIcon: 'fa-arrow-up-long',
+                diagramColor: 'text-emerald-400'
+            },
+            {
+                title: '雙打偷後場平高球 (Flick Serve) 破解策略',
+                sub: '第一原則：後退迅速、直接重殺或直線劈吊',
+                tag: '反客為主',
+                choice1: '起跳快速下壓直線重殺（Smash），直接打穿對手準備不足的防線。',
+                choice2: '滑板劈吊對角網前，打亂發球方前後站位。',
+                mistake: '原地跳起勉強點殺，球速慢反被對方守株待兔封死。',
+                diagramIcon: 'fa-fire',
+                diagramColor: 'text-rose-400'
+            },
+            {
+                title: '單打底線高遠發球應對策略',
+                sub: '第一原則：穩定拉吊結合、觀察對手防守重心',
+                tag: '四角拉吊',
+                choice1: '壓底線高遠球或平高球，將對手牢牢釘在後場底線。',
+                choice2: '收吊兩側網前小球，逼迫發球員大跨步上網救球。',
+                mistake: '盲目重殺！單打發球距離遠，盲目重殺體能消耗大且易遭防守反擊。',
+                diagramIcon: 'fa-arrow-up-right-dots',
+                diagramColor: 'text-purple-400'
+            },
+            {
+                title: '追身球與側邊線偷角應對策略',
+                sub: '第一原則：側身引拍、快速平抽推中路',
+                tag: '快速解圍',
+                choice1: '側身讓出揮拍空間，用反手快速平抽對手搭檔中路。',
+                choice2: '借力卸力放短網前，限制對手連續進攻。',
+                mistake: '持拍僵硬正面硬頂，容易導致回球出界或回擊半場甜球。',
+                diagramIcon: 'fa-forward',
+                diagramColor: 'text-amber-400'
+            }
+        ];
+
+        function setTacticsScenario(idx) {
+            playSound('drop');
+            const data = tacticsData[idx];
+            document.getElementById('tacTitle').innerText = data.title;
+            document.getElementById('tacSub').innerText = data.sub;
+            document.getElementById('tacTag').innerText = data.tag;
+            document.getElementById('tacChoice1').innerText = data.choice1;
+            document.getElementById('tacChoice2').innerText = data.choice2;
+            document.getElementById('tacMistake').innerText = data.mistake;
+            
+            document.getElementById('tacDiagramInner').innerHTML = `<i class="fa-solid ${data.diagramIcon} ${data.diagramColor} text-4xl animate-pulse"></i>`;
+
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById('tactic-btn-' + i);
+                if (i === idx) {
+                    btn.className = 'w-full text-left p-4 rounded-2xl border bg-emerald-950/60 border-emerald-500 text-white transition flex items-start gap-3';
+                } else {
+                    btn.className = 'w-full text-left p-4 rounded-2xl border bg-slate-900 border-slate-700 hover:border-slate-500 text-slate-300 transition flex items-start gap-3';
+                }
+            }
+        }
+
+        // ==================== CANVAS GAME SIMULATION ENGINE ====================
+        const canvas = document.getElementById('badmintonCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game State Variables
+        let gameState = 'IDLE'; // IDLE, SERVING, FLYING, HIT_WINDOW, RESOLVED, GAMEOVER
+        let matchType = 'doubles'; // doubles, singles
+        let difficulty = 'normal'; // easy, normal, hard
+        let totalRounds = 10;
+        let currentRound = 0;
+        let score = 0;
+        let combo = 0;
+        let maxCombo = 0;
+        let reactionTimes = [];
+        let serveStartTime = 0;
+
+        // Current Serve Info
+        let currentServe = {
+            type: 'short',
+            speed: 1.0,
+            x: 0,
+            y: 0,
+            peakHeight: 50,
+            flightDuration: 1400,
+            bestShots: ['kill', 'drop', 'cross']
+        };
+
+        // Particles
+        let particles = [];
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        function changeMatchType(val) {
+            matchType = val;
+            playSound('drop');
+        }
+
+        function changeDifficulty(val) {
+            difficulty = val;
+            playSound('drop');
+        }
+
+        // Start New Game
+        function startNewGame() {
+            initAudioContext();
+            playSound('perfect');
+            score = 0;
+            combo = 0;
+            maxCombo = 0;
+            currentRound = 0;
+            reactionTimes = [];
+            document.getElementById('uiScore').innerText = '0';
+            document.getElementById('uiCombo').innerText = '0x';
+            document.getElementById('uiRound').innerText = `0 / ${totalRounds}`;
+            document.getElementById('uiReactionTime').innerText = '-- ms';
+            document.getElementById('gameOverlay').classList.add('hidden');
+            
+            triggerNextServe();
+        }
+
+        // Opponent Serve Generation
+        function triggerNextServe() {
+            if (currentRound >= totalRounds) {
+                endGame();
+                return;
+            }
+
+            currentRound++;
+            document.getElementById('uiRound').innerText = `${currentRound} / ${totalRounds}`;
+            gameState = 'SERVING';
+            
+            document.getElementById('gameStatusText').innerText = `第 ${currentRound} 回合：對手準備發球...`;
+            document.getElementById('serveHintText').innerText = '盯緊發球動作！';
+
+            const serveTypes = (matchType === 'doubles') 
+                ? ['short', 'short', 'short', 'flick', 'body']
+                : ['high', 'short', 'high', 'flick'];
+
+            const chosenType = serveTypes[Math.floor(Math.random() * serveTypes.length)];
+            let speedMod = (difficulty === 'easy') ? 0.75 : (difficulty === 'hard') ? 1.35 : 1.0;
+
+            currentServe = {
+                type: chosenType,
+                speed: speedMod,
+                peakHeight: (chosenType === 'high') ? 180 : (chosenType === 'flick') ? 120 : 50,
+                flightDuration: (chosenType === 'high') ? 2200 / speedMod : (chosenType === 'flick') ? 1100 / speedMod : 1400 / speedMod,
+                bestShots: (chosenType === 'high') ? ['smash', 'drive', 'drop'] : 
+                           (chosenType === 'flick') ? ['smash', 'drive'] : 
+                           ['kill', 'drop', 'cross']
+            };
+
+            setTimeout(() => {
+                if (gameState === 'SERVING') {
+                    gameState = 'FLYING';
+                    serveStartTime = performance.now();
+                    playSound('serve');
+                    
+                    const serveNames = {
+                        short: '🏸 正前網前小球！',
+                        flick: '⚡ 突襲偷後場平高球！',
+                        high: '🚀 正手高遠球發底線！',
+                        body: '🎯 追身側邊球！'
+                    };
+                    document.getElementById('serveHintText').innerText = serveNames[chosenType];
+                }
+            }, 800);
+        }
+
+        // Player Returns Shot
+        function triggerPlayerShot(shotType) {
+            if (gameState !== 'FLYING') return;
+
+            const now = performance.now();
+            const elapsed = now - serveStartTime;
+            const flightTime = currentServe.flightDuration;
+            const timeDiff = elapsed - flightTime; // 0 is ideal peak window
+
+            let quality = 'GOOD';
+            let points = 100;
+
+            // Timing Evaluation (-250ms to +180ms is playable window)
+            if (Math.abs(timeDiff) <= 120) {
+                quality = 'PERFECT';
+                points = 250;
+            } else if (timeDiff > 120 && timeDiff <= 280) {
+                quality = 'LATE';
+                points = 80;
+            } else if (timeDiff < -120 && timeDiff >= -300) {
+                quality = 'EARLY';
+                points = 80;
+            } else {
+                quality = 'FAULT';
+                points = 0;
+            }
+
+            // Shot Strategy Suitability Check
+            const isIdealShot = currentServe.bestShots.includes(shotType);
+            if (!isIdealShot && quality !== 'FAULT') {
+                points = Math.round(points * 0.6);
+                quality = 'POOR_CHOICE';
+            }
+
+            const reactionTime = Math.round(Math.abs(timeDiff));
+            reactionTimes.push(reactionTime);
+            document.getElementById('uiReactionTime').innerText = `${reactionTime} ms`;
+
+            // Result handling
+            if (quality === 'PERFECT' || quality === 'GOOD') {
+                combo++;
+                if (combo > maxCombo) maxCombo = combo;
+                score += points + (combo * 20);
+                playSound(shotType === 'smash' || shotType === 'kill' ? 'smash' : 'drop');
+                showHitFeedback(quality === 'PERFECT' ? 'PERFECT!' : 'GOOD HIT!', 'text-emerald-400', `${getShotName(shotType)} · 得分 +${points}`);
+                spawnParticles(canvas.width / 2 / window.devicePixelRatio, canvas.height * 0.75 / window.devicePixelRatio, '#22c55e');
+            } else if (quality === 'POOR_CHOICE') {
+                combo = 0;
+                score += points;
+                playSound('drop');
+                showHitFeedback('戰術欠佳', 'text-amber-400', '擊球時機尚可，但球路易遭對手反擊');
+            } else if (quality === 'LATE' || quality === 'EARLY') {
+                combo = 0;
+                score += points;
+                playSound('drop');
+                showHitFeedback(quality === 'LATE' ? '擊球過慢 (LATE)' : '過早起拍 (EARLY)', 'text-amber-300', `時機偏差 ${reactionTime}ms`);
+            } else {
+                combo = 0;
+                playSound('fault');
+                showHitFeedback('掛網 / 出界 (FAULT)', 'text-rose-500', '未在有效擊球甜蜜點擊球');
+            }
+
+            document.getElementById('uiScore').innerText = score;
+            document.getElementById('uiCombo').innerText = `${combo}x`;
+
+            gameState = 'RESOLVED';
+            
+            setTimeout(() => {
+                triggerNextServe();
+            }, 1200);
+        }
+
+        function getShotName(shot) {
+            const map = {
+                kill: '封網撲殺',
+                drop: '貼網放短',
+                cross: '勾對角網前',
+                smash: '重扣殺球',
+                drive: '平抽快壓',
+                lift: '挑高遠球'
+            };
+            return map[shot] || shot;
+        }
+
+        function showHitFeedback(title, colorClass, subtitle) {
+            const fb = document.getElementById('hitFeedback');
+            const txt = document.getElementById('hitFeedbackText');
+            const sub = document.getElementById('hitFeedbackSub');
+
+            txt.innerText = title;
+            txt.className = `text-3xl sm:text-5xl font-black tracking-widest uppercase italic drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] ${colorClass}`;
+            sub.innerText = subtitle;
+
+            fb.classList.remove('opacity-0');
+            fb.style.transform = 'translate(-50%, -50%) scale(1.15)';
+
+            setTimeout(() => {
+                fb.classList.add('opacity-0');
+                fb.style.transform = 'translate(-50%, -50%) scale(0.9)';
+            }, 900);
+        }
+
+        function spawnParticles(x, y, color) {
+            for (let i = 0; i < 16; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    size: Math.random() * 4 + 2,
+                    color: color,
+                    alpha: 1.0,
+                    life: 1.0
+                });
+            }
+        }
+
+        // End Game Summary
+        function endGame() {
+            gameState = 'GAMEOVER';
+            const avgReaction = (reactionTimes.length > 0)
+                ? Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length)
+                : 0;
+
+            document.getElementById('statFinalScore').innerText = score;
+            document.getElementById('statMaxCombo').innerText = `${maxCombo}x`;
+            document.getElementById('statAvgReaction').innerText = `${avgReaction} ms`;
+            document.getElementById('overlayStats').classList.remove('hidden');
+            document.getElementById('overlayStats').classList.add('grid');
+
+            let rankTitle = '🏸 初學新星';
+            if (score >= 2500) rankTitle = '🥇 國家隊奧運級接發大師！';
+            else if (score >= 1800) rankTitle = '🥈 甲組主力高手！';
+            else if (score >= 1200) rankTitle = '🥉 校隊先發水準';
+
+            document.getElementById('overlayTitle').innerText = rankTitle;
+            document.getElementById('overlaySubtitle').innerText = `十回合對決完成！總得分：${score} 分，最高連擊 ${maxCombo} 次。`;
+            document.getElementById('startBtnText').innerText = '再戰一局 (Replay)';
+            document.getElementById('gameOverlay').classList.remove('hidden');
+
+            if (score >= 1800 && typeof confetti !== 'undefined') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        // Keyboard Shortcut Listener
+        window.addEventListener('keydown', (e) => {
+            const key = e.key.toUpperCase();
+            if (key === 'Q') triggerPlayerShot('kill');
+            if (key === 'W') triggerPlayerShot('drop');
+            if (key === 'E') triggerPlayerShot('cross');
+            if (key === 'A') triggerPlayerShot('smash');
+            if (key === 'S') triggerPlayerShot('drive');
+            if (key === 'D') triggerPlayerShot('lift');
+            if (key === ' ' && gameState === 'GAMEOVER') startNewGame();
+        });
+
+        // ==================== 2.5D COURT CANVAS RENDER LOOP ====================
+        function renderLoop() {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. Draw Perspective Court Background
+            drawPerspectiveCourt(w, h);
+
+            // 2. Draw Opponent Server (Top of Net)
+            drawOpponent(w, h);
+
+            // 3. Draw Shuttlecock & Trajectory
+            if (gameState === 'FLYING' || gameState === 'RESOLVED') {
+                drawShuttlecock(w, h);
+            }
+
+            // 4. Draw Player Reception Target Ring / Ready Avatar
+            drawPlayerZone(w, h);
+
+            // 5. Draw Particles
+            updateAndDrawParticles();
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        function drawPerspectiveCourt(w, h) {
+            const courtTop = h * 0.22;
+            const courtBottom = h * 0.94;
+            const topWidth = w * 0.58;
+            const bottomWidth = w * 0.88;
+
+            const topLeft = (w - topWidth) / 2;
+            const topRight = topLeft + topWidth;
+            const bottomLeft = (w - bottomWidth) / 2;
+            const bottomRight = bottomLeft + bottomWidth;
+
+            // Green Court Mat
+            ctx.fillStyle = '#0f4d2a';
+            ctx.beginPath();
+            ctx.moveTo(topLeft, courtTop);
+            ctx.lineTo(topRight, courtTop);
+            ctx.lineTo(bottomRight, courtBottom);
+            ctx.lineTo(bottomLeft, courtBottom);
+            ctx.closePath();
+            ctx.fill();
+
+            // Court Lines
+            ctx.strokeStyle = '#f8fafc';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Singles Sideline (Inner)
+            const singleTopOffset = topWidth * 0.08;
+            const singleBottomOffset = bottomWidth * 0.08;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(topLeft + singleTopOffset, courtTop);
+            ctx.lineTo(bottomLeft + singleBottomOffset, courtBottom);
+            ctx.moveTo(topRight - singleTopOffset, courtTop);
+            ctx.lineTo(bottomRight - singleBottomOffset, courtBottom);
+            ctx.stroke();
+
+            // Center Line
+            ctx.beginPath();
+            ctx.moveTo(w / 2, courtTop);
+            ctx.lineTo(w / 2, courtBottom);
+            ctx.stroke();
+
+            // Net Position (Middle Height)
+            const netY = h * 0.46;
+            const netWidth = w * 0.72;
+            const netLeft = (w - netWidth) / 2;
+            const netRight = netLeft + netWidth;
+
+            // Front Service Line
+            const frontServiceY = h * 0.58;
+            ctx.beginPath();
+            ctx.moveTo(w * 0.18, frontServiceY);
+            ctx.lineTo(w * 0.82, frontServiceY);
+            ctx.stroke();
+
+            // Net Mesh
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+            ctx.fillRect(netLeft, netY - 14, netWidth, 24);
+
+            // Net White Tape
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(netLeft - 4, netY - 16, netWidth + 8, 4);
+
+            // Net Posts
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(netLeft - 6, netY - 20, 5, 30);
+            ctx.fillRect(netRight + 1, netY - 20, 5, 30);
+        }
+
+        function drawOpponent(w, h) {
+            const oppX = w / 2;
+            const oppY = h * 0.30;
+
+            // Server Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.beginPath();
+            ctx.ellipse(oppX, oppY + 18, 16, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Opponent Silhouette
+            ctx.fillStyle = (gameState === 'SERVING') ? '#f59e0b' : '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(oppX, oppY - 12, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Body
+            ctx.fillRect(oppX - 6, oppY - 4, 12, 18);
+
+            // Racket
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(oppX + 6, oppY);
+            ctx.lineTo(oppX + 16, oppY - 12);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(oppX + 18, oppY - 16, 6, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        function drawShuttlecock(w, h) {
+            const now = performance.now();
+            const elapsed = now - serveStartTime;
+            const duration = currentServe.flightDuration;
+            const t = Math.min(Math.max(elapsed / duration, 0), 1.0);
+
+            const startX = w / 2 + 15;
+            const startY = h * 0.30;
+            
+            let targetX = w / 2 + 20;
+            let targetY = h * 0.72;
+
+            if (currentServe.type === 'flick' || currentServe.type === 'high') {
+                targetY = h * 0.85;
+                targetX = (matchType === 'doubles') ? w * 0.65 : w * 0.60;
+            } else if (currentServe.type === 'body') {
+                targetX = w / 2 - 10;
+                targetY = h * 0.68;
+            }
+
+            const curX = startX + (targetX - startX) * t;
+            const linearY = startY + (targetY - startY) * t;
+            const arcHeight = Math.sin(t * Math.PI) * currentServe.peakHeight;
+            const curY = linearY - arcHeight;
+
+            // Shadow on Court
+            ctx.fillStyle = `rgba(0, 0, 0, ${0.15 + t * 0.35})`;
+            ctx.beginPath();
+            ctx.ellipse(curX, linearY, 10 * (1 + t * 0.5), 4 * (1 + t * 0.5), 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Shuttlecock Body
+            ctx.save();
+            ctx.translate(curX, curY);
+
+            const scale = 0.8 + t * 0.6;
+            ctx.scale(scale, scale);
+
+            // Feather Skirt
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.moveTo(-6, -8);
+            ctx.lineTo(6, -8);
+            ctx.lineTo(3, 4);
+            ctx.lineTo(-3, 4);
+            ctx.closePath();
+            ctx.fill();
+
+            // Blue band
+            ctx.fillStyle = '#2563eb';
+            ctx.fillRect(-4, 0, 8, 2);
+
+            // Cork Head
+            ctx.fillStyle = '#fde047';
+            ctx.beginPath();
+            ctx.arc(0, 6, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawPlayerZone(w, h) {
+            const playerX = w / 2;
+            const playerY = h * 0.75;
+
+            // Sweetspot Reticle
+            const ringColor = (gameState === 'FLYING') ? '#22c55e' : 'rgba(255, 255, 255, 0.2)';
+            ctx.strokeStyle = ringColor;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+
+            ctx.beginPath();
+            ctx.ellipse(playerX + 20, playerY, 32, 14, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Stance
+            ctx.fillStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.ellipse(playerX - 12, playerY + 25, 8, 4, -0.2, 0, Math.PI * 2);
+            ctx.ellipse(playerX + 16, playerY + 32, 8, 4, 0.2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function updateAndDrawParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= 0.035;
+
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        // Initialize Canvas & loop on Load
+        window.onload = function() {
+            resizeCanvas();
+            renderLoop();
+        };
+    </script>
+</body>
+</html>

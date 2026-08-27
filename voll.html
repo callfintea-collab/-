@@ -91,7 +91,10 @@
             </div>
 
             <!-- Tab Navigation Links -->
-            <nav class="hidden md:flex space-x-1 lg:space-x-2 text-xs font-semibold">
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs font-semibold">
+                <a href="index.html" class="px-3 py-2 rounded-xl transition bg-slate-800 text-sky-300 hover:bg-slate-700 hover:text-white flex items-center border border-sky-500/30 mr-1" title="返回入口首頁">
+                    <i class="fa-solid fa-house mr-1.5 text-xs"></i>回首頁
+                </a>
                 <button onclick="switchTab('tab-stance')" id="btn-tab-stance" class="nav-btn px-3 py-2 rounded-xl transition bg-amber-500 text-slate-950 font-bold shadow-md">
                     <i class="fa-solid fa-user-ninja mr-1.5"></i>準備姿勢與觀念
                 </button>
@@ -122,6 +125,7 @@
 
         <!-- Mobile Dropdown Navigation -->
         <div id="mobileMenu" class="hidden md:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-2 pb-4 space-y-1 text-sm font-medium">
+            <a href="index.html" class="w-full text-left px-3 py-2.5 rounded-lg text-sky-400 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-house w-7 text-sky-400"></i>返回入口首頁</a>
             <button onclick="switchTab('tab-stance'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-user-ninja w-7 text-amber-400"></i>準備姿勢與觀念</button>
             <button onclick="switchTab('tab-arm'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-hand-holding w-7 text-amber-400"></i>手部與擊球技巧</button>
             <button onclick="switchTab('tab-sim'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-amber-300 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-gamepad w-7 text-amber-400"></i>模擬接球實驗室</button>
@@ -1309,6 +1313,11 @@
         window.onload = function() {
             resizeSimCanvas();
             updateArmDemo();
+
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(hash)) {
+                switchTab(hash);
+            }
 
             // Keyboard navigation for simulator
             window.addEventListener('keydown', (e) => {

@@ -1,0 +1,19 @@
+{
+  "name": "multi-subject-interactive-learning-portal",
+  "version": "1.1.0",
+  "description": "多元互動學習探索中心：國文（朱自清《背影》）與體育（排球接發球講堂）雙主題入口平台",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "education",
+    "interactive-learning",
+    "chinese-literature",
+    "volleyball",
+    "sports-science"
+  ],
+  "author": "",
+  "license": "MIT"
+}
