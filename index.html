@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多元互動學習探索中心 · 雙主題入口首頁（國文 × 排球）</title>
+    <title>互動學習與運動競技探索平台 · 總入口首頁</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Noto+Serif+TC:wght@600;900&family=Teko:wght@500;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -18,27 +18,16 @@
             theme: {
                 extend: {
                     colors: {
-                        amberCustom: {
-                            50: '#fffbeb',
-                            100: '#fef3c7',
-                            200: '#fde68a',
-                            500: '#f59e0b',
-                            600: '#d97706',
-                            700: '#b45309',
-                            800: '#92400e',
-                            900: '#78350f',
-                        },
-                        volleyball: {
-                            blue: '#032B56',
-                            gold: '#F5A623',
-                            court: '#E36414',
-                            sky: '#0284c7',
-                            dark: '#0B132B'
+                        brand: {
+                            dark: '#070a13',
+                            card: '#0f172a',
+                            border: '#1e293b'
                         }
                     },
                     fontFamily: {
-                        serif: ['"Noto Serif TC"', 'serif'],
                         sans: ['"Noto Sans TC"', 'Inter', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        score: ['Teko', 'sans-serif']
                     }
                 }
             }
@@ -46,34 +35,16 @@
     </script>
     <style>
         body {
-            font-family: 'Noto Sans TC', 'Inter', sans-serif;
-            background-color: #090d16;
-            color: #f1f5f9;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #070a13;
+            color: #f8fafc;
+            user-select: none;
         }
-        .serif-font {
-            font-family: 'Noto Serif TC', serif;
+        .portal-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .portal-card-literature {
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .portal-card-literature:hover {
+        .portal-card:hover {
             transform: translateY(-8px);
-            border-color: rgba(245, 158, 11, 0.6);
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.8), 0 0 30px 0 rgba(245, 158, 11, 0.25);
-        }
-        .portal-card-sport {
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .portal-card-sport:hover {
-            transform: translateY(-8px);
-            border-color: rgba(56, 189, 248, 0.6);
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.8), 0 0 30px 0 rgba(14, 165, 233, 0.25);
-        }
-        .module-subcard {
-            transition: all 0.25s ease;
-        }
-        .module-subcard:hover {
-            transform: translateY(-4px);
         }
         .bg-grid-pattern {
             background-size: 40px 40px;
@@ -83,613 +54,205 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-stone-950 relative overflow-x-hidden bg-grid-pattern">
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black bg-grid-pattern relative overflow-x-hidden">
 
-    <!-- Ambient Glow Backgrounds -->
-    <div class="fixed top-0 left-1/4 -translate-x-1/2 w-[600px] h-[450px] bg-amber-600/10 blur-[140px] rounded-full pointer-events-none -z-10"></div>
-    <div class="fixed top-1/3 right-10 w-[600px] h-[450px] bg-sky-600/10 blur-[140px] rounded-full pointer-events-none -z-10"></div>
-    <div class="fixed bottom-10 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-indigo-600/10 blur-[140px] rounded-full pointer-events-none -z-10"></div>
+    <!-- Ambient Glow Lights -->
+    <div class="fixed top-0 left-1/4 -translate-x-1/2 w-[600px] h-[450px] bg-emerald-600/10 blur-[130px] rounded-full pointer-events-none -z-10"></div>
+    <div class="fixed top-1/3 right-10 w-[500px] h-[400px] bg-amber-600/10 blur-[130px] rounded-full pointer-events-none -z-10"></div>
+    <div class="fixed bottom-0 left-1/3 w-[600px] h-[400px] bg-cyan-600/10 blur-[140px] rounded-full pointer-events-none -z-10"></div>
 
     <!-- Navigation Header -->
-    <header class="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800/80 shadow-xl">
+    <header class="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-3 group">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-indigo-600 to-sky-400 p-0.5 shadow-lg group-hover:scale-105 transition">
-                    <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-white font-extrabold text-lg">
-                        <i class="fa-solid fa-layer-group text-amber-400"></i>
-                    </div>
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-emerald-500 to-amber-500 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg">
+                    ✨
                 </div>
                 <div>
-                    <h1 class="text-base sm:text-lg font-black tracking-wide text-white flex items-center gap-2">
-                        多元互動學習探索中心
-                        <span class="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30 font-medium">雙主題入口</span>
+                    <h1 class="text-base sm:text-xl font-bold tracking-wide text-white flex items-center gap-2">
+                        互動探索與專題總中心
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">PORTAL HUB</span>
                     </h1>
-                    <p class="text-xs text-slate-400 hidden sm:block">國文學科 · 朱自清《背影》 ✕ 體育專題 · 排球接發球講堂</p>
+                    <p class="text-xs text-slate-400 hidden sm:block">體育競技實戰 · 戰術沙盤 · 文學沉浸體驗</p>
                 </div>
-            </a>
+            </div>
 
-            <!-- Quick Navigation Links -->
-            <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium">
-                <a href="#dual-portals" class="text-slate-300 hover:text-white transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-compass text-xs text-amber-400"></i>
-                    <span>核心專題</span>
-                </a>
-                <a href="#chinese-modules" class="text-slate-300 hover:text-amber-300 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-book-bookmark text-xs text-amber-400"></i>
-                    <span>國文模組</span>
-                </a>
-                <a href="#volleyball-modules" class="text-slate-300 hover:text-sky-300 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-volleyball text-xs text-sky-400"></i>
-                    <span>排球模組</span>
-                </a>
-                <a href="#comparison" class="text-slate-300 hover:text-indigo-300 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-sparkles text-xs text-indigo-400"></i>
-                    <span>特色亮點</span>
-                </a>
-            </nav>
-
-            <!-- Direct Quick Buttons -->
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <a href="beiying.html" class="px-3.5 py-2 bg-stone-900/90 hover:bg-amber-950/60 text-amber-300 border border-amber-500/40 rounded-xl transition text-xs font-semibold flex items-center gap-1.5 shadow-sm">
-                    <i class="fa-solid fa-feather-pointed"></i>
-                    <span>國文專題</span>
-                </a>
-                <a href="voll.html" class="px-3.5 py-2 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white rounded-xl transition text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-sky-900/40">
-                    <i class="fa-solid fa-volleyball"></i>
-                    <span>排球專題</span>
-                </a>
+            <!-- Header Quick Badge -->
+            <div class="flex items-center space-x-2 text-xs font-semibold text-slate-300">
+                <span class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>3 大獨立專題運行中</span>
+                </span>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="flex-grow">
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         
-        <!-- Hero Section -->
-        <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-14 text-center relative">
+        <!-- Hero Title Banner -->
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 text-cyan-300 text-xs sm:text-sm font-semibold border border-cyan-500/30 backdrop-blur shadow-md">
+                <i class="fa-solid fa-compass"></i>
+                <span>EXPLORE & TRAIN · 請選擇您要開啟的互動專題</span>
+            </div>
             
-            <!-- Category Tag -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 text-slate-300 text-xs sm:text-sm font-medium border border-slate-700/80 mb-6 backdrop-blur shadow-md">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>跨領域沉浸式學習 · 經典人文 ✕ 運動科學</span>
-            </div>
-
-            <!-- Main Title -->
-            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.25] mb-6">
-                穿透文字的深情 · 掌握球場的精準<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-400 to-sky-400">
-                    雙核心沉浸式互動學習中心
+            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+                多元互動學習與競技探索<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-amber-400">
+                    一站式全景導覽門戶
                 </span>
-            </h1>
-
-            <!-- Subtitle -->
-            <p class="max-w-3xl mx-auto text-base sm:text-lg text-slate-300 leading-relaxed font-normal mb-10">
-                整合傳統人文精讀與現代運動技能訓練，運用動態分鏡、互動物理模擬、心靈圖譜與即時評量，為您打造生動直觀的一站式自主探索體驗。
+            </h2>
+            
+            <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+                整合頂級排球接發球技術講堂、羽球接發球 2.5D 實戰反應遊戲，以及百年文學經典《背影》全景數位探索，帶來極致流暢的沉浸式體驗。
             </p>
+        </div>
+        <!-- Three Grand Portal Cards Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- Quick Stat Bar -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto pt-4 border-t border-slate-800/80">
-                <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 backdrop-blur">
-                    <div class="text-2xl sm:text-3xl font-black text-amber-400">2 大</div>
-                    <div class="text-xs text-slate-400 mt-1">跨領域核心專題</div>
-                </div>
-                <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 backdrop-blur">
-                    <div class="text-2xl sm:text-3xl font-black text-sky-400">11 個</div>
-                    <div class="text-xs text-slate-400 mt-1">專業互動模組章節</div>
-                </div>
-                <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 backdrop-blur">
-                    <div class="text-2xl sm:text-3xl font-black text-emerald-400">100%</div>
-                    <div class="text-xs text-slate-400 mt-1">沉浸模擬與動畫分鏡</div>
-                </div>
-                <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 backdrop-blur">
-                    <div class="text-2xl sm:text-3xl font-black text-purple-400">即時</div>
-                    <div class="text-xs text-slate-400 mt-1">雙重互動評量測驗</div>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- ==================== DUAL PORTALS SHOWCASE ==================== -->
-        <section id="dual-portals" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="text-center max-w-2xl mx-auto mb-10">
-                <span class="px-3 py-1 bg-indigo-500/10 text-indigo-300 text-xs rounded-full border border-indigo-500/30 font-semibold tracking-wider">
-                    EXPLORE THE HUBS
-                </span>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">
-                    選擇專題，開啟沈浸學習
-                </h2>
-                <p class="text-slate-400 text-sm mt-1">點擊下方專題卡片直接進入完整獨立學習單元</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-                <!-- Portal Card 1: 國文專題 (朱自清《背影》) -->
-                <div class="portal-card-literature bg-gradient-to-b from-stone-900/90 via-stone-950/95 to-stone-900/90 border border-amber-700/40 rounded-3xl p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden backdrop-blur">
-                    <!-- Background Ambient Decoration -->
-                    <div class="absolute -right-6 -top-6 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div class="absolute right-6 bottom-4 opacity-5 text-amber-400 font-serif text-8xl pointer-events-none select-none">
-                        背影
-                    </div>
-
-                    <div>
-                        <!-- Header / Tag -->
-                        <div class="flex items-center justify-between gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 flex items-center gap-1.5">
-                                <i class="fa-solid fa-scroll"></i>
-                                <span>國文學科專題 · 散文經典</span>
-                            </span>
-                            <span class="text-xs text-stone-400 font-serif">1925 朱自清 著</span>
-                        </div>
-
-                        <!-- Subject Title -->
-                        <div class="flex items-start gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-600 to-amber-700 flex items-center justify-center text-white font-bold text-2xl shadow-lg shrink-0">
-                                📖
-                            </div>
-                            <div>
-                                <h3 class="text-2xl sm:text-3xl font-black text-amber-100 serif-font">
-                                    朱自清《背影》
-                                </h3>
-                                <p class="text-xs sm:text-sm text-amber-400 font-medium mt-0.5">
-                                    互動文學探索平台 · 中國現代抒情散文百年經典
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Description -->
-                        <p class="text-stone-300 text-sm leading-relaxed mb-6 font-serif">
-                            重回 1917 年慘淡冬日的南京浦口車站。以動態分鏡重現父親穿過鐵道、攀爬月台買橘的感人瞬間，輔以原文白描畫線賞析、作者 Instagram 主頁與父子和解歷程。
-                        </p>
-
-                        <!-- Highlights list -->
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-6">
-                            <div class="bg-stone-900/80 border border-stone-800 px-3 py-2 rounded-xl text-xs text-stone-300 flex items-center gap-2">
-                                <i class="fa-solid fa-train-subway text-amber-400"></i>
-                                <span>買橘動態分鏡</span>
-                            </div>
-                            <div class="bg-stone-900/80 border border-stone-800 px-3 py-2 rounded-xl text-xs text-stone-300 flex items-center gap-2">
-                                <i class="fa-solid fa-highlighter text-orange-400"></i>
-                                <span>互動畫線精讀</span>
-                            </div>
-                            <div class="bg-stone-900/80 border border-stone-800 px-3 py-2 rounded-xl text-xs text-stone-300 flex items-center gap-2">
-                                <i class="fa-brands fa-instagram text-rose-400"></i>
-                                <span>朱自清 IG 主頁</span>
-                            </div>
-                            <div class="bg-stone-900/80 border border-stone-800 px-3 py-2 rounded-xl text-xs text-stone-300 flex items-center gap-2">
-                                <i class="fa-solid fa-heart-pulse text-purple-400"></i>
-                                <span>父子情感圖譜</span>
-                            </div>
-                            <div class="bg-stone-900/80 border border-stone-800 px-3 py-2 rounded-xl text-xs text-stone-300 flex items-center gap-2">
-                                <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i>
-                                <span>真實歷史背景</span>
-                            </div>
-                            <div class="bg-stone-900/80 border border-stone-800 px-3 py-2 rounded-xl text-xs text-stone-300 flex items-center gap-2">
-                                <i class="fa-solid fa-graduation-cap text-sky-400"></i>
-                                <span>深度問答測驗</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Action & Deep Links -->
-                    <div class="pt-5 border-t border-stone-800/80 space-y-3">
-                        <a href="beiying.html" class="w-full py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-500 text-stone-950 font-black rounded-2xl shadow-lg transition flex items-center justify-center gap-2.5 text-sm transform hover:scale-[1.01]">
-                            <span>進入國文專題完整探索</span>
-                            <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </a>
-                        <div class="flex items-center justify-between text-xs text-stone-400 px-1">
-                            <span class="text-stone-500">直達子章節：</span>
-                            <div class="flex items-center space-x-3">
-                                <a href="beiying.html#tab-scene" class="text-amber-300 hover:underline">買橘分鏡</a>
-                                <span class="text-stone-700">·</span>
-                                <a href="beiying.html#tab-text" class="text-amber-300 hover:underline">原文賞析</a>
-                                <span class="text-stone-700">·</span>
-                                <a href="beiying.html#tab-quiz" class="text-amber-300 hover:underline">問答測驗</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Portal Card 2: 體育專題 (排球接發球技術講堂) -->
-                <div class="portal-card-sport bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-slate-900/90 border border-sky-600/40 rounded-3xl p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden backdrop-blur">
-                    <!-- Background Ambient Decoration -->
-                    <div class="absolute -right-6 -top-6 w-36 h-36 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div class="absolute right-6 bottom-4 opacity-5 text-sky-400 font-sans font-black text-8xl pointer-events-none select-none">
-                        VOLLEY
-                    </div>
-
-                    <div>
-                        <!-- Header / Tag -->
-                        <div class="flex items-center justify-between gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-semibold border border-sky-500/30 flex items-center gap-1.5">
-                                <i class="fa-solid fa-volleyball"></i>
-                                <span>體育運動專題 · 技能講堂</span>
-                            </span>
-                            <span class="text-xs text-slate-400 font-mono">頂級到位率專題</span>
-                        </div>
-
-                        <!-- Subject Title -->
-                        <div class="flex items-start gap-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-2xl shadow-lg shrink-0">
-                                🏐
-                            </div>
-                            <div>
-                                <h3 class="text-2xl sm:text-3xl font-black text-white">
-                                    排球接發球技術講堂
-                                </h3>
-                                <p class="text-xs sm:text-sm text-sky-400 font-medium mt-0.5">
-                                    核心技術與互動訓練講堂 · 預判、重心與手臂平面
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Description -->
-                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                            系統化拆解接發球核心力學。從「準備姿勢與預判」、「手臂夾角插切壓」到「互動模擬接球實驗室」，搭配實戰訓練菜單與誤區診斷，全面提升到位率。
-                        </p>
-
-                        <!-- Highlights list -->
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-6">
-                            <div class="bg-slate-900/80 border border-slate-800 px-3 py-2 rounded-xl text-xs text-slate-300 flex items-center gap-2">
-                                <i class="fa-solid fa-user-ninja text-amber-400"></i>
-                                <span>準備姿勢觀念</span>
-                            </div>
-                            <div class="bg-slate-900/80 border border-slate-800 px-3 py-2 rounded-xl text-xs text-slate-300 flex items-center gap-2">
-                                <i class="fa-solid fa-hand-holding text-sky-400"></i>
-                                <span>手部擊球技巧</span>
-                            </div>
-                            <div class="bg-slate-900/80 border border-slate-800 px-3 py-2 rounded-xl text-xs text-slate-300 flex items-center gap-2">
-                                <i class="fa-solid fa-gamepad text-indigo-400"></i>
-                                <span>模擬接球實驗室</span>
-                            </div>
-                            <div class="bg-slate-900/80 border border-slate-800 px-3 py-2 rounded-xl text-xs text-slate-300 flex items-center gap-2">
-                                <i class="fa-solid fa-stopwatch text-emerald-400"></i>
-                                <span>實用訓練菜單</span>
-                            </div>
-                            <div class="bg-slate-900/80 border border-slate-800 px-3 py-2 rounded-xl text-xs text-slate-300 flex items-center gap-2">
-                                <i class="fa-solid fa-stethoscope text-rose-400"></i>
-                                <span>問題診斷測驗</span>
-                            </div>
-                            <div class="bg-slate-900/80 border border-slate-800 px-3 py-2 rounded-xl text-xs text-slate-300 flex items-center gap-2">
-                                <i class="fa-solid fa-volume-high text-yellow-400"></i>
-                                <span>Tone.js 音效提示</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Action & Deep Links -->
-                    <div class="pt-5 border-t border-slate-800/80 space-y-3">
-                        <a href="voll.html" class="w-full py-3.5 bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-blue-500 text-white font-black rounded-2xl shadow-lg transition flex items-center justify-center gap-2.5 text-sm transform hover:scale-[1.01]">
-                            <span>進入排球講堂完整探索</span>
-                            <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </a>
-                        <div class="flex items-center justify-between text-xs text-slate-400 px-1">
-                            <span class="text-slate-500">直達子章節：</span>
-                            <div class="flex items-center space-x-3">
-                                <a href="voll.html#tab-stance" class="text-sky-300 hover:underline">準備姿勢</a>
-                                <span class="text-slate-700">·</span>
-                                <a href="voll.html#tab-sim" class="text-sky-300 hover:underline">模擬接球</a>
-                                <span class="text-slate-700">·</span>
-                                <a href="voll.html#tab-diag" class="text-sky-300 hover:underline">問題診斷</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ==================== DETAILED SUBMODULES: CHINESE LITERATURE ==================== -->
-        <section id="chinese-modules" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 border-t border-slate-800/80">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <!-- Card 1: 🏸 羽球接發球大師 -->
+            <div class="portal-card bg-slate-900/90 border border-slate-800 hover:border-emerald-500/80 rounded-3xl p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden group hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.3)] backdrop-blur">
+                <div class="absolute -right-6 -top-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition"></div>
                 <div>
-                    <div class="inline-flex items-center gap-2 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-book-open"></i> 國文學科深度章節
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-amber-100 serif-font">
-                        朱自清《背影》六大核心探索模組
-                    </h2>
-                    <p class="text-stone-400 text-sm mt-1">點選任一卡片直接前往該主題互動章節</p>
-                </div>
-                <a href="beiying.html" class="inline-flex items-center gap-2 text-xs font-bold text-amber-400 hover:text-amber-300 px-4 py-2 rounded-xl bg-amber-950/40 border border-amber-500/30 self-start md:self-auto transition">
-                    <span>開啟專題全部內容</span>
-                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                </a>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                
-                <!-- Sub 1 -->
-                <a href="beiying.html#tab-scene" class="module-subcard bg-stone-900/60 border border-stone-800 hover:border-amber-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-train-subway"></i>
+                    <!-- Icon & Badges -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-3xl shadow-lg group-hover:scale-110 transition">
+                            🏸
                         </div>
-                        <span class="text-[11px] text-amber-300/80 font-mono">01 / 分鏡</span>
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-bold rounded-full border border-emerald-500/30">
+                            2.5D 實戰遊戲
+                        </span>
                     </div>
-                    <h4 class="text-base font-bold text-stone-100 group-hover:text-amber-300 transition mb-2">
-                        經典重現 · 買橘分鏡
-                    </h4>
-                    <p class="text-xs text-stone-400 leading-relaxed font-serif">
-                        逐步拆解父親「探、穿、攀、縮、傾」等動態細節，感受月台買橘的深沉父愛。
-                    </p>
-                </a>
 
-                <!-- Sub 2 -->
-                <a href="beiying.html#tab-text" class="module-subcard bg-stone-900/60 border border-stone-800 hover:border-orange-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-highlighter"></i>
-                        </div>
-                        <span class="text-[11px] text-orange-300/80 font-mono">02 / 精讀</span>
-                    </div>
-                    <h4 class="text-base font-bold text-stone-100 group-hover:text-orange-300 transition mb-2">
-                        原文精讀 · 畫線賞析
-                    </h4>
-                    <p class="text-xs text-stone-400 leading-relaxed font-serif">
-                        互動式畫線標記：即時解析關鍵動詞、黑布大馬褂與朱紅橘子的色彩對比象徵。
-                    </p>
-                </a>
-
-                <!-- Sub 3 -->
-                <a href="beiying.html#tab-author" class="module-subcard bg-stone-900/60 border border-stone-800 hover:border-rose-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg">
-                            <i class="fa-brands fa-instagram"></i>
-                        </div>
-                        <span class="text-[11px] text-rose-300/80 font-mono">03 / 社群</span>
-                    </div>
-                    <h4 class="text-base font-bold text-stone-100 group-hover:text-rose-300 transition mb-2">
-                        朱自清 IG 社交主頁
-                    </h4>
-                    <p class="text-xs text-stone-400 leading-relaxed font-serif">
-                        以現代社群介面呈現作家生平、《荷塘月色》、《匆匆》與北大求學歲月。
-                    </p>
-                </a>
-
-                <!-- Sub 4 -->
-                <a href="beiying.html#tab-emotion" class="module-subcard bg-stone-900/60 border border-stone-800 hover:border-purple-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-heart-pulse"></i>
-                        </div>
-                        <span class="text-[11px] text-purple-300/80 font-mono">04 / 圖譜</span>
-                    </div>
-                    <h4 class="text-base font-bold text-stone-100 group-hover:text-purple-300 transition mb-2">
-                        父子情感心境圖譜
-                    </h4>
-                    <p class="text-xs text-stone-400 leading-relaxed font-serif">
-                        完整解析作者從「自詡聰明」到「流淚震撼」，再到「讀信理解」的心靈轉折。
-                    </p>
-                </a>
-
-                <!-- Sub 5 -->
-                <a href="beiying.html#tab-history" class="module-subcard bg-stone-900/60 border border-stone-800 hover:border-emerald-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                        </div>
-                        <span class="text-[11px] text-emerald-300/80 font-mono">05 / 歷史</span>
-                    </div>
-                    <h4 class="text-base font-bold text-stone-100 group-hover:text-emerald-300 transition mb-2">
-                        真實背景與終極和解
-                    </h4>
-                    <p class="text-xs text-stone-400 leading-relaxed font-serif">
-                        考證 1917 年朱家家變與 1928 年老父親讀完全文老淚縱橫的冰釋前嫌。
-                    </p>
-                </a>
-
-                <!-- Sub 6 -->
-                <a href="beiying.html#tab-quiz" class="module-subcard bg-stone-900/60 border border-stone-800 hover:border-sky-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                        </div>
-                        <span class="text-[11px] text-sky-300/80 font-mono">06 / 評量</span>
-                    </div>
-                    <h4 class="text-base font-bold text-stone-100 group-hover:text-sky-300 transition mb-2">
-                        文學深度問答測驗
-                    </h4>
-                    <p class="text-xs text-stone-400 leading-relaxed font-serif">
-                        互動答題測驗：檢驗文章結構、反語修辭與色彩意象之核心文學理解。
-                    </p>
-                </a>
-
-            </div>
-        </section>
-
-        <!-- ==================== DETAILED SUBMODULES: VOLLEYBALL ==================== -->
-        <section id="volleyball-modules" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 border-t border-slate-800/80">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-                <div>
-                    <div class="inline-flex items-center gap-2 text-sky-400 text-xs font-semibold uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-volleyball"></i> 體育專題深度章節
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white">
-                        排球接發球五大核心講堂模組
-                    </h2>
-                    <p class="text-slate-400 text-sm mt-1">點選任一卡片直接前往該技術互動章節</p>
-                </div>
-                <a href="voll.html" class="inline-flex items-center gap-2 text-xs font-bold text-sky-400 hover:text-sky-300 px-4 py-2 rounded-xl bg-sky-950/40 border border-sky-500/30 self-start md:self-auto transition">
-                    <span>開啟講堂全部內容</span>
-                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                </a>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                
-                <!-- Sub 1 -->
-                <a href="voll.html#tab-stance" class="module-subcard bg-slate-900/60 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-user-ninja"></i>
-                        </div>
-                        <span class="text-[11px] text-amber-300/80 font-mono">01 / 觀念</span>
-                    </div>
-                    <h4 class="text-base font-bold text-white group-hover:text-amber-400 transition mb-2">
-                        準備姿勢與動態預判
-                    </h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        掌握雙腳站距、重心前傾、分腿墊步（Split-step）與發球者拋球視線追蹤。
-                    </p>
-                </a>
-
-                <!-- Sub 2 -->
-                <a href="voll.html#tab-arm" class="module-subcard bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-hand-holding"></i>
-                        </div>
-                        <span class="text-[11px] text-sky-300/80 font-mono">02 / 手部</span>
-                    </div>
-                    <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition mb-2">
-                        手臂夾角與擊球平面
-                    </h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        「插、切、壓」三字訣，手腕下壓鎖定、手臂內側平面的借力與主動卸力技巧。
-                    </p>
-                </a>
-
-                <!-- Sub 3 -->
-                <a href="voll.html#tab-sim" class="module-subcard bg-slate-900/60 border border-slate-800 hover:border-indigo-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-gamepad"></i>
-                        </div>
-                        <span class="text-[11px] text-indigo-300/80 font-mono">03 / 模擬</span>
-                    </div>
-                    <h4 class="text-base font-bold text-white group-hover:text-indigo-300 transition mb-2">
-                        互動模擬接球實驗室
-                    </h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        即時調整接球角度、來球力道與卸力參數，直觀觀察接球反彈軌跡與到位率。
-                    </p>
-                </a>
-
-                <!-- Sub 4 -->
-                <a href="voll.html#tab-drills" class="module-subcard bg-slate-900/60 border border-slate-800 hover:border-emerald-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-stopwatch"></i>
-                        </div>
-                        <span class="text-[11px] text-emerald-300/80 font-mono">04 / 菜單</span>
-                    </div>
-                    <h4 class="text-base font-bold text-white group-hover:text-emerald-300 transition mb-2">
-                        實戰訓練菜單與階段
-                    </h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        包含單人對牆墊球、雙人拋接與高速發球對抗等階梯式訓練計時與計畫。
-                    </p>
-                </a>
-
-                <!-- Sub 5 -->
-                <a href="voll.html#tab-diag" class="module-subcard bg-slate-900/60 border border-slate-800 hover:border-rose-500/50 rounded-2xl p-5 block group">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-stethoscope"></i>
-                        </div>
-                        <span class="text-[11px] text-rose-300/80 font-mono">05 / 診斷</span>
-                    </div>
-                    <h4 class="text-base font-bold text-white group-hover:text-rose-300 transition mb-2">
-                        動作診斷與觀念評量
-                    </h4>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        揮臂過大、重心過高、腳步停滯等常見錯誤即時自我檢視與互動測驗。
-                    </p>
-                </a>
-
-            </div>
-        </section>
-
-        <!-- ==================== FEATURE HIGHLIGHT COMPARISON ==================== -->
-        <section id="comparison" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
-                <div class="text-center max-w-xl mx-auto mb-8">
-                    <h3 class="text-xl sm:text-2xl font-black text-white">
-                        跨學科學習平台特色
+                    <h3 class="text-2xl font-bold text-white group-hover:text-emerald-300 transition mb-3">
+                        羽球接發球大師
                     </h3>
-                    <p class="text-xs sm:text-sm text-slate-400 mt-1">融合感性文學共鳴與理性動作技能建構</p>
-                </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        真實 2.5D 透視羽球場發球模擬！面對貼網小球、偷後場 Flick 與高遠球，運用 6 大回擊決策（撲、放、勾、殺、抽、挑）考驗毫秒級實戰反應。
+                    </p>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-5 rounded-2xl bg-amber-950/20 border border-amber-600/30">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
-                                📜
-                            </div>
-                            <h4 class="font-bold text-amber-200 text-sm">國文專題設計理念</h4>
-                        </div>
-                        <ul class="text-xs text-stone-300 space-y-2 font-serif">
-                            <li class="flex items-start gap-2">
-                                <i class="fa-solid fa-check text-amber-400 mt-0.5"></i>
-                                <span><strong>動態分鏡可視化</strong>：將朱自清經典文字化為畫面，體會爬月台的艱辛。</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fa-solid fa-check text-amber-400 mt-0.5"></i>
-                                <span><strong>畫線筆記隨點即解</strong>：色彩、動詞、象徵修辭一目了然。</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fa-solid fa-check text-amber-400 mt-0.5"></i>
-                                <span><strong>現代社群互動轉譯</strong>：以 Instagram 生平貼文拉近百年前經典距離。</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="p-5 rounded-2xl bg-sky-950/20 border border-sky-600/30">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-9 h-9 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold">
-                                🏐
-                            </div>
-                            <h4 class="font-bold text-sky-200 text-sm">排球專題設計理念</h4>
-                        </div>
-                        <ul class="text-xs text-slate-300 space-y-2">
-                            <li class="flex items-start gap-2">
-                                <i class="fa-solid fa-check text-sky-400 mt-0.5"></i>
-                                <span><strong>力學觀念分步拆解</strong>：建立「預判 → 腳步 → 平面 → 卸力」完整迴路。</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fa-solid fa-check text-sky-400 mt-0.5"></i>
-                                <span><strong>互動實驗室反饋</strong>：參數化模擬接球，直觀理解反射角與力道傳遞。</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fa-solid fa-check text-sky-400 mt-0.5"></i>
-                                <span><strong>Tone.js 音效回饋</strong>：結合音效提示增強擊球節奏感與訓練專注度。</span>
-                            </li>
-                        </ul>
+                    <!-- Feature Points -->
+                    <div class="space-y-2 text-xs text-slate-300 font-medium pb-6 border-b border-slate-800">
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-bolt text-emerald-400"></i> 支援鍵盤熱鍵 (Q/W/E/A/S/D) 與觸控</div>
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-chess-board text-emerald-400"></i> 單雙打戰術沙盤與前三拍預判</div>
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-award text-emerald-400"></i> BWF 官方界線與四大黃金要領</div>
                     </div>
                 </div>
 
-                <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="beiying.html" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-book"></i>
-                        <span>開啟 朱自清《背影》專題</span>
-                    </a>
-                    <a href="voll.html" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-volleyball"></i>
-                        <span>開啟 排球接發球技術講堂</span>
+                <div class="pt-6">
+                    <a href="badminton.html" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-2xl shadow-xl transition flex items-center justify-center gap-2 text-sm transform group-hover:scale-[1.02]">
+                        <span>進入羽球實戰遊戲</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
                 </div>
             </div>
-        </section>
+
+            <!-- Card 2: 🏐 排球接發球講堂 -->
+            <div class="portal-card bg-slate-900/90 border border-slate-800 hover:border-amber-500/80 rounded-3xl p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden group hover:shadow-[0_20px_40px_-15px_rgba(245,158,11,0.3)] backdrop-blur">
+                <div class="absolute -right-6 -top-6 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition"></div>
+                <div>
+                    <!-- Icon & Badges -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-3xl shadow-lg group-hover:scale-110 transition">
+                            🏐
+                        </div>
+                        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-bold rounded-full border border-amber-500/30">
+                            專業訓練講堂
+                        </span>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white group-hover:text-amber-300 transition mb-3">
+                        排球接發球專題講堂
+                    </h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        建立頂級到位率的系統化訓練！涵蓋「準備姿態、手臂平面控制、接球模擬實驗室、實戰陣型站位與常見問題診斷」。
+                    </p>
+
+                    <!-- Feature Points -->
+                    <div class="space-y-2 text-xs text-slate-300 font-medium pb-6 border-b border-slate-800">
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-hand-holding text-amber-400"></i> 手臂平面角度與手腕下壓鎖定技巧</div>
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-gamepad text-amber-400"></i> 互動式接球軌跡與弧度模擬實驗</div>
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-list-check text-amber-400"></i> 接發球實戰自我檢測診斷室</div>
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <a href="voll.html" class="w-full py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-2xl shadow-xl transition flex items-center justify-center gap-2 text-sm transform group-hover:scale-[1.02]">
+                        <span>進入排球訓練講堂</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 3: 📖 朱自清《背影》文學探索 -->
+            <div class="portal-card bg-slate-900/90 border border-slate-800 hover:border-cyan-500/80 rounded-3xl p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden group hover:shadow-[0_20px_40px_-15px_rgba(6,182,212,0.3)] backdrop-blur">
+                <div class="absolute -right-6 -top-6 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition"></div>
+                <div>
+                    <!-- Icon & Badges -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-3xl shadow-lg group-hover:scale-110 transition">
+                            📖
+                        </div>
+                        <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 text-xs font-bold rounded-full border border-cyan-500/30">
+                            文學全景探索
+                        </span>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white group-hover:text-cyan-300 transition mb-3 font-serif">
+                        朱自清《背影》文學探索
+                    </h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6 font-serif">
+                        重回 1917 年浦口車站！將經典散文轉化為 4 步驟買橘動態分鏡、原文畫線精讀、作者現代 IG 主頁、父子心靈圖譜與歷史考證。
+                    </p>
+
+                    <!-- Feature Points -->
+                    <div class="space-y-2 text-xs text-slate-300 font-medium pb-6 border-b border-slate-800">
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-train-subway text-cyan-400"></i> 浦口車站買橘動態互動分鏡</div>
+                        <div class="flex items-center gap-2"><i class="fa-brands fa-instagram text-cyan-400"></i> 穿越百年的朱自清官方 IG 介面</div>
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-highlighter text-cyan-400"></i> 原文白描動詞、色彩對比即時賞析</div>
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <a href="beiying.html" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black rounded-2xl shadow-xl transition flex items-center justify-center gap-2 text-sm transform group-hover:scale-[1.02]">
+                        <span>開啟文學探索專題</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- System Architecture Highlights -->
+        <div class="mt-16 bg-slate-900/60 border border-slate-800/80 rounded-3xl p-6 sm:p-8 backdrop-blur">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="text-3xl sm:text-4xl font-bold text-cyan-400 font-mono">3 大</div>
+                    <div class="text-xs text-slate-400 mt-1">完整獨立專題模組</div>
+                </div>
+                <div>
+                    <div class="text-3xl sm:text-4xl font-bold text-emerald-400 font-mono">15+</div>
+                    <div class="text-xs text-slate-400 mt-1">動態分鏡與互動機制</div>
+                </div>
+                <div>
+                    <div class="text-3xl sm:text-4xl font-bold text-amber-400 font-mono">60 FPS</div>
+                    <div class="text-xs text-slate-400 mt-1">Canvas 物理彈道引擎</div>
+                </div>
+                <div>
+                    <div class="text-3xl sm:text-4xl font-bold text-purple-400 font-mono">100%</div>
+                    <div class="text-xs text-slate-400 mt-1">純前端 免安裝即開即用</div>
+                </div>
+            </div>
+        </div>
 
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 border-t border-slate-800/80 py-10 text-slate-400 text-xs font-sans">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-sky-500 flex items-center justify-center text-slate-950 font-bold text-sm">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div>
-                    <span class="font-bold text-slate-200 block">多元互動學習探索中心 · Portal</span>
-                    <span class="text-slate-500 text-xs">國文學科（朱自清背影） ✕ 體育專題（排球接發球講堂）</span>
-                </div>
-            </div>
-            <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
-                <a href="index.html" class="hover:text-white transition font-bold text-slate-200">入口首頁</a>
-                <a href="beiying.html" class="hover:text-amber-300 transition">國文：朱自清《背影》</a>
-                <a href="voll.html" class="hover:text-sky-300 transition">體育：排球接發球講堂</a>
-            </div>
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-8 text-slate-500 text-xs text-center font-mono">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="text-slate-300 font-sans font-medium">多元互動探索與競技訓練平台 · 總入口中心</p>
+            <p>Interactive Master Portal · All Systems Ready</p>
         </div>
     </footer>
 
