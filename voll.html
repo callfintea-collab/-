@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排球接發球：核心技術與互動訓練講堂</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tone.js for audio cues -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        volleyball: {
+                            blue: '#032B56',
+                            gold: '#F5A623',
+                            court: '#E36414',
+                            wood: '#D4A373',
+                            green: '#10B981',
+                            dark: '#0F172A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+        }
+        .court-gradient {
+            background: linear-gradient(135deg, #032B56 0%, #0F172A 100%);
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        /* Custom glow effects */
+        .glow-gold {
+            box-shadow: 0 0 20px rgba(245, 166, 35, 0.35);
+        }
+        .glow-blue {
+            box-shadow: 0 0 20px rgba(3, 43, 86, 0.6);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('tab-stance')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-slate-900 font-extrabold text-xl shadow-lg transform hover:scale-105 transition">
+                    <i class="fa-solid fa-volleyball"></i>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold tracking-wide text-white flex items-center gap-2">
+                        排球接發球講堂
+                        <span class="text-[10px] bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2 py-0.5 rounded-full font-mono">頂級到位率專題</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">預判 · 低重心 · 穩定手臂平面</p>
+                </div>
+            </div>
+
+            <!-- Tab Navigation Links -->
+            <nav class="hidden md:flex space-x-1 lg:space-x-2 text-xs font-semibold">
+                <button onclick="switchTab('tab-stance')" id="btn-tab-stance" class="nav-btn px-3 py-2 rounded-xl transition bg-amber-500 text-slate-950 font-bold shadow-md">
+                    <i class="fa-solid fa-user-ninja mr-1.5"></i>準備姿勢與觀念
+                </button>
+                <button onclick="switchTab('tab-arm')" id="btn-tab-arm" class="nav-btn px-3 py-2 rounded-xl transition text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-hand-holding mr-1.5"></i>手部與擊球技巧
+                </button>
+                <button onclick="switchTab('tab-sim')" id="btn-tab-sim" class="nav-btn px-3 py-2 rounded-xl transition text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-gamepad mr-1.5 text-amber-400"></i>模擬接球實驗室
+                </button>
+                <button onclick="switchTab('tab-drills')" id="btn-tab-drills" class="nav-btn px-3 py-2 rounded-xl transition text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-stopwatch mr-1.5"></i>實用訓練菜單
+                </button>
+                <button onclick="switchTab('tab-diag')" id="btn-tab-diag" class="nav-btn px-3 py-2 rounded-xl transition text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-stethoscope mr-1.5"></i>問題診斷與測驗
+                </button>
+            </nav>
+
+            <div class="flex items-center space-x-2">
+                <button id="soundToggle" onclick="toggleAudio()" class="p-2.5 rounded-xl bg-slate-800 text-slate-400 hover:text-amber-400 hover:bg-slate-700 transition" title="音效開關">
+                    <i class="fa-solid fa-volume-xmark text-lg" id="soundIcon"></i>
+                </button>
+                <!-- Mobile menu toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobileMenu" class="hidden md:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-2 pb-4 space-y-1 text-sm font-medium">
+            <button onclick="switchTab('tab-stance'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-user-ninja w-7 text-amber-400"></i>準備姿勢與觀念</button>
+            <button onclick="switchTab('tab-arm'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-hand-holding w-7 text-amber-400"></i>手部與擊球技巧</button>
+            <button onclick="switchTab('tab-sim'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-amber-300 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-gamepad w-7 text-amber-400"></i>模擬接球實驗室</button>
+            <button onclick="switchTab('tab-drills'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-stopwatch w-7 text-amber-400"></i>實用訓練菜單</button>
+            <button onclick="switchTab('tab-diag'); toggleMobileMenu()" class="w-full text-left px-3 py-2.5 rounded-lg text-slate-200 hover:bg-slate-800 flex items-center"><i class="fa-solid fa-stethoscope w-7 text-amber-400"></i>問題診斷與測驗</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ==================== TAB 1: PREPARATION & CORE CONCEPTS ==================== -->
+        <section id="tab-stance" class="tab-content fade-in space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 p-6 sm:p-10 border border-slate-800 shadow-2xl overflow-hidden">
+                <div class="absolute -right-8 -bottom-10 opacity-10 text-amber-400 font-extrabold text-9xl pointer-events-none select-none">
+                    PASS
+                </div>
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold border border-amber-500/20">
+                        <i class="fa-solid fa-shield-halved"></i> 接發球的核心三要素
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+                        提前判斷 · 重心放低 · 手臂穩定
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        排球接發球是發起進攻的第一步。透過正確的預備姿勢和靈活移動步伐，能大幅提升第一顆球到達舉球員區域的「到位率」。
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="switchTab('tab-sim')" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-lg shadow-amber-500/20 transition flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-play"></i> 進入物理模擬測試
+                        </button>
+                        <button onclick="switchTab('tab-arm')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-angles-right"></i> 查看擊球手部技巧
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3 Core Stance Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Card 1: 降低重心 -->
+                <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 transition duration-300 shadow-lg flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-shoe-prints"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 flex items-center justify-between">
+                            1. 降低重心
+                            <span class="text-xs text-amber-400 font-mono font-normal">前腳掌著力</span>
+                        </h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                            雙腳自然微開比肩稍寬，膝蓋微彎屈膝蹲低。將身體重心落在雙腳前掌（大拇指球下方），隨時保持雙腿彈性，準備向前後左右爆發啟動。
+                        </p>
+                    </div>
+                    <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-1">
+                        <div class="text-amber-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> 關鍵細節：</div>
+                        <p>切忌腳跟貼死地面！隨時微幅墊腳踩踏，提升反應速度。</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: 手臂放鬆分開 -->
+                <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 transition duration-300 shadow-lg flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-hands"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 flex items-center justify-between">
+                            2. 手臂放鬆分開
+                            <span class="text-xs text-blue-400 font-mono font-normal">靈活跑位</span>
+                        </h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                            等待來球時手臂先自然屈肘分開，放在胸前或腰側，不要過早死死夾緊。如此才能讓身體與肩膀保持輕鬆自由，利於快速奔跑移動。
+                        </p>
+                    </div>
+                    <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-1">
+                        <div class="text-blue-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> 關鍵時機：</div>
+                        <p>直到確定球的落點並移動到位後，擊球前瞬間再併攏伸直！</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: 視線穩定 -->
+                <div class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 transition duration-300 shadow-lg flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 flex items-center justify-between">
+                            3. 視線穩定
+                            <span class="text-xs text-emerald-400 font-mono font-normal">正面迎球</span>
+                        </h3>
+                        <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+                            移動時頭部切勿劇烈上下晃動。眼睛透過球網下方緊盯對手發球瞬間與球體旋轉軌跡，提前判斷落點，並盡可能移動到球的正後方正面迎球。
+                        </p>
+                    </div>
+                    <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-1">
+                        <div class="text-emerald-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> 視覺習慣：</div>
+                        <p>持續追蹤球體至接觸手臂擊球面，不提早轉頭看舉球員。</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Interactive Visual Stance Checklist Widget -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-6 mb-6">
+                    <div>
+                        <span class="text-xs text-amber-400 font-mono uppercase font-bold tracking-widest">Interactive Inspector</span>
+                        <h3 class="text-xl font-bold text-white mt-1">預備姿勢動態檢視與常見誤區對比</h3>
+                    </div>
+                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+                        <button id="btnStanceGood" onclick="toggleStanceMode('good')" class="px-4 py-2 rounded-lg font-bold transition bg-emerald-500 text-slate-950">
+                            <i class="fa-solid fa-circle-check mr-1"></i> 正確預備姿勢
+                        </button>
+                        <button id="btnStanceBad" onclick="toggleStanceMode('bad')" class="px-4 py-2 rounded-lg font-bold transition text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-triangle-exclamation mr-1"></i> 常見錯誤動作
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <!-- SVG Visual Illustration of Player Stance -->
+                    <div class="bg-slate-950 rounded-2xl p-6 border border-slate-800 flex flex-col items-center justify-center min-h-[280px] relative overflow-hidden">
+                        
+                        <svg id="stanceSvg" class="w-64 h-64 transition-all duration-500" viewBox="0 0 200 200">
+                            <!-- Court Line -->
+                            <line x1="10" y1="180" x2="190" y2="180" stroke="#334155" stroke-width="4" stroke-linecap="round" />
+                            
+                            <!-- Head / Vision Line -->
+                            <circle id="svgHead" cx="100" cy="60" r="16" fill="#F5A623" />
+                            <!-- Eye Vision Beam -->
+                            <path id="svgVision" d="M 115 58 L 180 30 L 180 80 Z" fill="rgba(16, 185, 129, 0.25)" stroke="#10B981" stroke-dasharray="3,3" />
+
+                            <!-- Torso Body -->
+                            <path id="svgTorso" d="M 100 76 L 90 120" stroke="#38BDF8" stroke-width="12" stroke-linecap="round" />
+
+                            <!-- Legs (Bent knee low stance vs straight legs) -->
+                            <path id="svgLegLeft" d="M 90 120 L 65 145 L 60 180" stroke="#F8FAFC" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                            <path id="svgLegRight" d="M 90 120 L 120 148 L 135 180" stroke="#F8FAFC" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+
+                            <!-- Arms (Relaxed vs Prematurely locked) -->
+                            <path id="svgArmLeft" d="M 95 85 L 125 100 L 120 125" stroke="#F5A623" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+                            <path id="svgArmRight" d="M 95 85 L 130 100 L 125 125" stroke="#F5A623" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+
+                            <!-- Weight Center Indicator Ball -->
+                            <circle id="svgCenter" cx="90" cy="135" r="7" fill="#10B981" class="animate-pulse" />
+                        </svg>
+
+                        <div id="stanceBadge" class="mt-2 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            重心低 · 雙手放鬆 · 視線平視
+                        </div>
+                    </div>
+
+                    <!-- Explanatory Analysis List -->
+                    <div class="space-y-4">
+                        <div id="stanceDescTitle" class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i> 正確預備姿勢要點拆解
+                        </div>
+                        <ul id="stanceList" class="space-y-3 text-xs sm:text-sm text-slate-300">
+                            <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <i class="fa-solid fa-angles-right text-amber-400 mt-1"></i>
+                                <span><b>膝蓋深屈曲（約110~120度）：</b> 大腿肌群保持張力，降低身體總重心，能隨時啟動跨步。</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <i class="fa-solid fa-angles-right text-amber-400 mt-1"></i>
+                                <span><b>雙臂微屈肘分開：</b> 避免過早伸直夾緊造成肩膀僵硬，手臂預備在胸腰前側自然游移。</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <i class="fa-solid fa-angles-right text-amber-400 mt-1"></i>
+                                <span><b>前腳掌壓地：</b> 腳跟輕微離地懸空，將重量落在大拇指球下方，隨時準備側邁步或並步。</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: ARM & CONTACT TECHNIQUES ==================== -->
+        <section id="tab-arm" class="tab-content hidden fade-in space-y-8">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="max-w-3xl mb-8 space-y-2">
+                    <span class="text-xs text-amber-400 font-mono uppercase font-bold tracking-widest">Platform & Contact Mechanics</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">手部與擊球技巧：打造平整穩固的接球「面」</h2>
+                    <p class="text-slate-400 text-sm">
+                        接發球的平面決定了球反彈的方向與高低。了解手臂併攏與全身推送的力量機制，是達成精準第一球到位的核心關鍵。
+                    </p>
+                </div>
+
+                <!-- 2 Main Cards: Platform Locking & Pushing forward -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Tech Card 1: Platform & Wrist -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4 relative overflow-hidden">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-hand-holding-hand"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">1. 確實併攏：手臂「面」的建立</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                            兩手肘必須<b>確實伸直鎖緊</b>，雙手手腕向下壓，使雙臂前段內側形成一個寬敞平整的平面（俗稱接球面）。
+                        </p>
+                        
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-xs space-y-2">
+                            <div class="text-amber-400 font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-bullseye"></i> 最佳擊球位置（Sweet Spot）：
+                            </div>
+                            <p class="text-slate-300">
+                                位於<b>手腕上方約5~15公分處的前臂肌肉部位</b>。切忌用手掌、手腕關節或手肘處接球，否則球容易彈跳失控。
+                            </p>
+                        </div>
+
+                        <!-- Platform Form Interactive Checklist -->
+                        <div class="pt-2 space-y-2 text-xs">
+                            <div class="flex items-center gap-2 text-emerald-400 font-semibold">
+                                <i class="fa-solid fa-check text-sm"></i> 兩手拇指平行靠攏壓低
+                            </div>
+                            <div class="flex items-center gap-2 text-emerald-400 font-semibold">
+                                <i class="fa-solid fa-check text-sm"></i> 雙肘伸直鎖死，不可彎曲
+                            </div>
+                            <div class="flex items-center gap-2 text-emerald-400 font-semibold">
+                                <i class="fa-solid fa-check text-sm"></i> 肩膀前聳夾緊，固定手臂角度
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Card 2: Body Push vs Arm Swing -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4 relative overflow-hidden">
+                        <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-person-walking-arrow-right"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">2. 迎向來球：全身力量微幅推送</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                            接球時<b>嚴禁用手臂去大幅「甩球」或「揮拍」</b>！發球強勁時，揮臂極易導致球過網出界或飛後方。
+                        </p>
+
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-xs space-y-2">
+                            <div class="text-orange-400 font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-trend-up"></i> 正確發力機制：
+                            </div>
+                            <p class="text-slate-300">
+                                利用雙腳膝蓋微幅延伸登地、配合上半身微幅前跨的全身力量<b>「迎推」送球</b>，手臂僅作為穩定的角度反射面。
+                            </p>
+                        </div>
+
+                        <div class="pt-2 space-y-2 text-xs">
+                            <div class="flex items-center gap-2 text-amber-400 font-semibold">
+                                <i class="fa-solid fa-triangle-exclamation text-sm"></i> 避開大揮臂：球速快時，手臂只需固定角度「擋球」
+                            </div>
+                            <div class="flex items-center gap-2 text-amber-400 font-semibold">
+                                <i class="fa-solid fa-triangle-exclamation text-sm"></i> 接慢浮球時：用下肢伸展推動手臂導向舉球員
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Angle & Platform Control Sandbox -->
+                <div class="mt-8 bg-slate-950 rounded-2xl p-6 border border-slate-800 space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-amber-400"></i> 手臂角度與推送力道互動實驗
+                            </h3>
+                            <p class="text-xs text-slate-400">調整手臂與地面的夾角及肢體推送力道，觀察球的反彈軌跡影響。</p>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs">
+                            <span class="text-slate-400 font-mono">手臂夾角: <b id="angleValText" class="text-amber-400 text-sm">45°</b></span>
+                            <span class="text-slate-400 font-mono">推送幅度: <b id="pushValText" class="text-amber-400 text-sm">微幅推擠</b></span>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox Controls & Preview -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-300 block mb-1">手臂平台角度 (Arm Platform Angle)</label>
+                                <input type="range" id="armAngleInput" min="15" max="75" value="45" oninput="updateArmDemo()" class="w-full accent-amber-500 cursor-pointer">
+                                <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                                    <span>15° (壓平向前)</span>
+                                    <span>45° (標準到位)</span>
+                                    <span>75° (高彈向上)</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-bold text-slate-300 block mb-1">發力方式 (Force Mechanism)</label>
+                                <select id="armForceInput" onchange="updateArmDemo()" class="w-full bg-slate-900 border border-slate-700 text-xs text-white p-2.5 rounded-xl font-sans focus:outline-none focus:border-amber-500">
+                                    <option value="push">腿部穩健迎推 (Correct Body Push)</option>
+                                    <option value="swing">大甩手臂揮球 (Incorrect Arm Swing)</option>
+                                    <option value="still">吸收來球力道固定角度 (Absorb Power Cushion)</option>
+                                </select>
+                            </div>
+
+                            <button onclick="testArmPass()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-md">
+                                <i class="fa-solid fa-play mr-1"></i> 測試模擬發球反彈
+                            </button>
+                        </div>
+
+                        <!-- Canvas Diagram Demo -->
+                        <div class="lg:col-span-2 bg-slate-900 rounded-xl p-4 border border-slate-800 relative min-h-[220px] flex items-center justify-center">
+                            <canvas id="armDemoCanvas" class="w-full h-52 block"></canvas>
+                            <div id="armFeedbackTag" class="absolute top-3 right-3 text-[11px] bg-slate-950/80 px-2.5 py-1 rounded-md border border-slate-700 text-amber-400 font-mono">
+                                準備測試
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: SERVE RECEIVE SIMULATOR ==================== -->
+        <section id="tab-sim" class="tab-content hidden fade-in space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+                
+                <!-- Game Header & Live Metrics Bar -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-mono font-bold border border-amber-500/30">
+                            <i class="fa-solid fa-gamepad"></i> Real-time Physics Simulator
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mt-1">排球接發球到位率實驗室</h2>
+                        <p class="text-xs text-slate-400">移動接球員位置並調整接球手臂角度，將對方發球精準送到綠色舉球目標區！</p>
+                    </div>
+
+                    <!-- Metrics Badges -->
+                    <div class="flex flex-wrap gap-3 font-mono text-xs">
+                        <div class="bg-slate-950 px-3.5 py-2 rounded-xl border border-slate-800 text-center">
+                            <span class="text-slate-400 block text-[10px]">接球次數</span>
+                            <span id="gameTotalPasses" class="text-base font-bold text-white">0</span>
+                        </div>
+                        <div class="bg-slate-950 px-3.5 py-2 rounded-xl border border-slate-800 text-center">
+                            <span class="text-slate-400 block text-[10px]">完美到位率</span>
+                            <span id="gameAccuracyRate" class="text-base font-bold text-emerald-400">0%</span>
+                        </div>
+                        <div class="bg-slate-950 px-3.5 py-2 rounded-xl border border-slate-800 text-center">
+                            <span class="text-slate-400 block text-[10px]">當前發球型態</span>
+                            <span id="gameServeType" class="text-xs font-bold text-amber-400">平托飄球</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Canvas Court Container -->
+                <div class="relative w-full rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden shadow-2xl">
+                    <canvas id="simCanvas" class="w-full h-80 sm:h-96 block cursor-crosshair"></canvas>
+
+                    <!-- Overlay Controls / Touch buttons for mobile -->
+                    <div class="absolute bottom-3 left-3 right-3 flex flex-wrap justify-between items-center bg-slate-900/80 backdrop-blur p-2.5 rounded-xl border border-slate-800 text-xs gap-2">
+                        <div class="flex items-center gap-2">
+                            <button onclick="movePlayerLeft()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:bg-amber-500 active:text-slate-950 text-white rounded-lg transition font-bold">
+                                <i class="fa-solid fa-arrow-left"></i> 左移
+                            </button>
+                            <button onclick="movePlayerRight()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:bg-amber-500 active:text-slate-950 text-white rounded-lg transition font-bold">
+                                右移 <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            <span class="text-slate-400 text-[11px] hidden sm:inline ml-2">(可拖曳接球員或鍵盤 <b>← / →</b> 鍵)</span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <button onclick="adjustPlatformAngle(-5)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 rounded-lg transition font-mono font-bold" title="壓平平台">
+                                <i class="fa-solid fa-rotate-left"></i> 角度-
+                            </button>
+                            <button onclick="adjustPlatformAngle(5)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 rounded-lg transition font-mono font-bold" title="抬高平台">
+                                <i class="fa-solid fa-rotate-right"></i> 角度+
+                            </button>
+                            <button onclick="triggerNewServe()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg transition shadow">
+                                <i class="fa-solid fa-volleyball mr-1"></i> 發球！
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Settings & Controls -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sans-font">
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                        <span class="text-slate-400 font-semibold block">發球種類選擇</span>
+                        <select id="selectServeType" onchange="changeServeMode()" class="w-full bg-slate-900 border border-slate-700 text-white p-2 rounded-lg focus:outline-none focus:border-amber-500">
+                            <option value="float">平托飄球 (Floating Serve - 軌跡左右飄忽)</option>
+                            <option value="spin">強勁跳發 (Power Topspin - 球速快落點深)</option>
+                            <option value="short">網前前跳短球 (Short Drop Serve - 考驗前前移動)</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                        <span class="text-slate-400 font-semibold block">目標舉球區 (Target Setter Zone)</span>
+                        <p class="text-slate-300 text-[11px]">目標位於前場網前 2號~3號位（綠色光圈）。到位率越高得分越高！</p>
+                    </div>
+
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-slate-400 font-semibold block">重置數據</span>
+                            <span class="text-[10px] text-slate-500">重新計算到位率統計</span>
+                        </div>
+                        <button onclick="resetGameStats()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-rose-400 rounded-lg font-bold border border-slate-700 transition">
+                            <i class="fa-solid fa-rotate-right"></i> 重置
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: PRACTICAL DRILLS ==================== -->
+        <section id="tab-drills" class="tab-content hidden fade-in space-y-8">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <div class="max-w-3xl mb-8 space-y-2">
+                    <span class="text-xs text-amber-400 font-mono uppercase font-bold tracking-widest">Practical Training Drills</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">實用訓練方法：建立穩固肌記憶</h2>
+                    <p class="text-slate-400 text-sm">
+                        透過循序漸進的三大核心訓練法，從個人球感、定點到位到快節奏多球訓練，全面提升接發球表現。
+                    </p>
+                </div>
+
+                <!-- 3 Drill Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Drill 1 -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-mono px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">基礎菜單 1</span>
+                                <i class="fa-solid fa-cubes text-slate-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2">自拋自接 / 對牆低手互擊</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                                對牆連續低手墊球擊球，訓練擊球平面的穩定性與觸球感。確保每次觸球都擊在中臂 Sweet Spot 上。
+                            </p>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-slate-800 text-xs text-slate-300">
+                            <div class="font-bold text-amber-400">🎯 訓練目標：</div>
+                            <p>連續對牆墊球 50 次不落地，維持固定手肘伸直角度。</p>
+                        </div>
+                    </div>
+
+                    <!-- Drill 2 -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-mono px-2.5 py-1 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">進階菜單 2</span>
+                                <i class="fa-solid fa-bullseye text-slate-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2">定點接發球移動到位</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                                同伴發固定或半固定落點的球，練習者迅速移動至球的「正後方」，用正面接起並送至網前舉球員目標框。
+                            </p>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-slate-800 text-xs text-slate-300">
+                            <div class="font-bold text-blue-400">🎯 訓練目標：</div>
+                            <p>要求每顆球接起後高度高於白網1.5公尺，並落在目標圈內。</p>
+                        </div>
+                    </div>
+
+                    <!-- Drill 3 -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-mono px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30">高階菜單 3</span>
+                                <i class="fa-solid fa-bolt text-slate-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2">多球快節奏訓練 (Wave Drill)</h3>
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                                教練或同伴連續快速發球，接球者接完一顆後迅速回歸原位預備接下一顆，極限訓練專注力與第一步爆發啟動速度。
+                            </p>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-slate-800 text-xs text-slate-300">
+                            <div class="font-bold text-rose-400">🎯 訓練目標：</div>
+                            <p>高強度每組10~15顆球，保持高頻率呼吸與低重心運轉。</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Built-in Wave Drill Rhythm Timer & Metronome Widget -->
+                <div class="bg-slate-950 rounded-2xl p-6 border border-slate-800 space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-clock text-amber-400"></i> Wave Drill 快節奏訓練輔助計時器
+                            </h3>
+                            <p class="text-xs text-slate-400">提供發球節奏哨音提示與每組秒數倒數，輔助現場訓練實施。</p>
+                        </div>
+                        <div class="flex items-center gap-2 font-mono text-2xl font-bold text-amber-400" id="timerDisplay">
+                            00:30.0
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <button id="btnStartDrillTimer" onclick="toggleDrillTimer()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs transition shadow-lg">
+                                <i class="fa-solid fa-play mr-1"></i> 開始訓練組
+                            </button>
+                            <button onclick="resetDrillTimer()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs border border-slate-700 transition">
+                                重置時間
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-4 text-xs">
+                            <span class="text-slate-400">發球間隔 (Tempo):</span>
+                            <select id="selectDrillInterval" class="bg-slate-900 border border-slate-700 text-amber-400 p-2 rounded-lg font-mono focus:outline-none">
+                                <option value="3000">3.0 秒 / 顆 (標準速)</option>
+                                <option value="2000">2.0 秒 / 顆 (極速挑戰)</option>
+                                <option value="4000">4.0 秒 / 顆 (基礎訓練)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: DIAGNOSTIC & QUIZ ==================== -->
+        <section id="tab-diag" class="tab-content hidden fade-in space-y-8">
+            
+            <!-- Section 1: Problem Diagnostic -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+                <div>
+                    <span class="text-xs text-amber-400 font-mono uppercase font-bold tracking-widest">Self Diagnostic</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">接發球常見問題診斷與解法對照</h2>
+                    <p class="text-xs text-slate-400">點選你在球場上最常遇到的接球失誤，立即為你診斷技術要點！</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <button onclick="diagnoseIssue('back')" class="diag-btn p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-amber-500 text-left transition space-y-2 group">
+                        <div class="text-amber-400 text-lg group-hover:scale-110 transition"><i class="fa-solid fa-circle-arrow-up"></i></div>
+                        <h4 class="font-bold text-white text-sm">1. 球接完容易直接往後飛 / 飛出後方底線</h4>
+                        <p class="text-xs text-slate-400">對強勁發球或高遠球時常發生的失誤</p>
+                    </button>
+
+                    <button onclick="diagnoseIssue('flat')" class="diag-btn p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-amber-500 text-left transition space-y-2 group">
+                        <div class="text-amber-400 text-lg group-hover:scale-110 transition"><i class="fa-solid fa-arrow-down-long"></i></div>
+                        <h4 class="font-bold text-white text-sm">2. 球彈得太低、弧度太平，無法給舉球員</h4>
+                        <p class="text-xs text-slate-400">接球高度不足，舉球員難以組織攻擊</p>
+                    </button>
+
+                    <button onclick="diagnoseIssue('slow')" class="diag-btn p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-amber-500 text-left transition space-y-2 group">
+                        <div class="text-amber-400 text-lg group-hover:scale-110 transition"><i class="fa-solid fa-person-running"></i></div>
+                        <h4 class="font-bold text-white text-sm">3. 看到球來卻動不了 / 移動總是慢半拍</h4>
+                        <p class="text-xs text-slate-400">啟動第一步過慢，無法正面迎球</p>
+                    </button>
+                </div>
+
+                <!-- Diagnostic Output Box -->
+                <div id="diagResultBox" class="bg-slate-950 p-6 rounded-2xl border border-amber-500/40 space-y-3 fade-in">
+                    <div class="flex items-center gap-2 text-amber-400 font-bold text-base">
+                        <i class="fa-solid fa-user-doctor"></i> 診斷報告與建議處方
+                    </div>
+                    <p id="diagResultText" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        請點擊上方三項常見失誤之一以獲得個人化矯正建議。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 2: Interactive Quiz -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 max-w-4xl mx-auto">
+                <div class="text-center space-y-2">
+                    <span class="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs rounded-full font-bold font-mono">Knowledge Check</span>
+                    <h3 class="text-2xl font-bold text-white">排球接發球觀念深度測驗</h3>
+                    <p class="text-xs text-slate-400">檢視你是否已掌握接發球的靈魂技術！</p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="q-card bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                        <p class="font-bold text-white text-sm sm:text-base">1. 在等待對方發球時，手臂的正確擺放狀態為何？</p>
+                        <div class="space-y-2 text-xs sm:text-sm font-sans">
+                            <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">A. 提早將雙手死死夾緊伸直，防止來不及接</button>
+                            <button onclick="checkQuiz(this, true)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">B. 手臂先自然屈肘分開放鬆，直到移動到位擊球前瞬間再併攏</button>
+                            <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">C. 手臂放在背後，等球過網再伸出來</button>
+                        </div>
+                        <div class="q-feedback hidden p-3 rounded-xl text-xs leading-relaxed"></div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="q-card bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                        <p class="font-bold text-white text-sm sm:text-base">2. 接強勁來球時，主要應該依靠什麼力量將球送到目標區？</p>
+                        <div class="space-y-2 text-xs sm:text-sm font-sans">
+                            <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">A. 用手臂像羽球拍一樣大力向上「甩」球</button>
+                            <button onclick="checkQuiz(this, true)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">B. 固定好手臂平面，配合雙腳膝蓋伸展與全身微幅前跨的迎推力量</button>
+                            <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">C. 跳起來在空中用單手打過去</button>
+                        </div>
+                        <div class="q-feedback hidden p-3 rounded-xl text-xs leading-relaxed"></div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="q-card bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                        <p class="font-bold text-white text-sm sm:text-base">3. 接發球時，最佳的觸球位置（Sweet Spot）位於手臂何處？</p>
+                        <div class="space-y-2 text-xs sm:text-sm font-sans">
+                            <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">A. 十指交扣的手掌部位</button>
+                            <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">B. 靠近手肘的關節凹陷處</button>
+                            <button onclick="checkQuiz(this, true)" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition">C. 手腕上方約5~15公分處平整的前臂內側肌肉部位</button>
+                        </div>
+                        <div class="q-feedback hidden p-3 rounded-xl text-xs leading-relaxed"></div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-500 text-xs py-8 border-t border-slate-800 font-sans">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="text-slate-300 font-semibold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-volleyball text-amber-500"></i> 排球接發球核心技術與互動訓練講堂
+            </p>
+            <p class="text-slate-500">提前判斷 · 重心放低 · 手臂穩定 · 提升到位率</p>
+        </div>
+    </footer>
+
+    <!-- Application Logic Scripts -->
+    <script>
+        // Audio Synth state with Tone.js
+        let audioEnabled = false;
+        let synth = null;
+
+        function initAudio() {
+            if (!synth && typeof Tone !== 'undefined') {
+                synth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "triangle" },
+                    envelope: { attack: 0.05, decay: 0.2, sustain: 0.2, release: 0.8 }
+                }).toDestination();
+                synth.volume.value = -10;
+            }
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const icon = document.getElementById('soundIcon');
+            if (audioEnabled) {
+                Tone.start();
+                initAudio();
+                icon.className = 'fa-solid fa-volume-high text-amber-400 text-lg';
+                playNote('C5');
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-lg';
+            }
+        }
+
+        function playNote(note = 'E4', duration = "8n") {
+            if (audioEnabled && synth) {
+                try {
+                    synth.triggerAttackRelease(note, duration);
+                } catch(e) {}
+            }
+        }
+
+        // Navigation Tab Switcher
+        function switchTab(tabId) {
+            playNote('G4');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(tabId);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = 'nav-btn px-3 py-2 rounded-xl transition text-slate-300 hover:bg-slate-800 hover:text-white';
+            });
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = 'nav-btn px-3 py-2 rounded-xl transition bg-amber-500 text-slate-950 font-bold shadow-md';
+            }
+
+            if (tabId === 'tab-sim') {
+                setTimeout(resizeSimCanvas, 100);
+            } else if (tabId === 'tab-arm') {
+                setTimeout(updateArmDemo, 100);
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        // Stance Inspector Widget Logic
+        function toggleStanceMode(mode) {
+            playNote('E4');
+            const btnGood = document.getElementById('btnStanceGood');
+            const btnBad = document.getElementById('btnStanceBad');
+
+            const svgHead = document.getElementById('svgHead');
+            const svgVision = document.getElementById('svgVision');
+            const svgTorso = document.getElementById('svgTorso');
+            const svgLegLeft = document.getElementById('svgLegLeft');
+            const svgLegRight = document.getElementById('svgLegRight');
+            const svgArmLeft = document.getElementById('svgArmLeft');
+            const svgArmRight = document.getElementById('svgArmRight');
+            const svgCenter = document.getElementById('svgCenter');
+            const badge = document.getElementById('stanceBadge');
+            const title = document.getElementById('stanceDescTitle');
+            const list = document.getElementById('stanceList');
+
+            if (mode === 'good') {
+                btnGood.className = 'px-4 py-2 rounded-lg font-bold transition bg-emerald-500 text-slate-950';
+                btnBad.className = 'px-4 py-2 rounded-lg font-bold transition text-slate-400 hover:text-white';
+
+                // Lower stance, bent knees, relaxed arms
+                svgHead.setAttribute('cy', '60');
+                svgVision.setAttribute('d', 'M 115 58 L 180 30 L 180 80 Z');
+                svgTorso.setAttribute('d', 'M 100 76 L 90 120');
+                svgLegLeft.setAttribute('d', 'M 90 120 L 65 145 L 60 180');
+                svgLegRight.setAttribute('d', 'M 90 120 L 120 148 L 135 180');
+                svgArmLeft.setAttribute('d', 'M 95 85 L 125 100 L 120 125');
+                svgArmRight.setAttribute('d', 'M 95 85 L 130 100 L 125 125');
+                svgCenter.setAttribute('cy', '135');
+                svgCenter.setAttribute('fill', '#10B981');
+
+                badge.className = 'mt-2 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                badge.innerText = '重心低 · 雙手放鬆 · 視線平視';
+
+                title.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i> 正確預備姿勢要點拆解';
+                list.innerHTML = `
+                    <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <i class="fa-solid fa-angles-right text-amber-400 mt-1"></i>
+                        <span><b>膝蓋深屈曲（約110~120度）：</b> 大腿肌群保持張力，降低身體總重心，能隨時啟動跨步。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <i class="fa-solid fa-angles-right text-amber-400 mt-1"></i>
+                        <span><b>雙臂微屈肘分開：</b> 避免過早伸直夾緊造成肩膀僵硬，手臂預備在胸腰前側自然游移。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <i class="fa-solid fa-angles-right text-amber-400 mt-1"></i>
+                        <span><b>前腳掌壓地：</b> 腳跟輕微離地懸空，將重量落在大拇指球下方，隨時準備側邁步或並步。</span>
+                    </li>
+                `;
+            } else {
+                btnBad.className = 'px-4 py-2 rounded-lg font-bold transition bg-rose-500 text-slate-950';
+                btnGood.className = 'px-4 py-2 rounded-lg font-bold transition text-slate-400 hover:text-white';
+
+                // High stance, straight legs, locked rigid arms early
+                svgHead.setAttribute('cy', '40');
+                svgVision.setAttribute('d', 'M 115 38 L 180 60 L 180 90 Z');
+                svgTorso.setAttribute('d', 'M 100 56 L 100 110');
+                svgLegLeft.setAttribute('d', 'M 100 110 L 80 145 L 80 180');
+                svgLegRight.setAttribute('d', 'M 100 110 L 120 145 L 120 180');
+                svgArmLeft.setAttribute('d', 'M 100 65 L 145 90 L 150 110');
+                svgArmRight.setAttribute('d', 'M 100 65 L 145 90 L 150 110');
+                svgCenter.setAttribute('cy', '85');
+                svgCenter.setAttribute('fill', '#EF4444');
+
+                badge.className = 'mt-2 text-xs font-bold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                badge.innerText = '重心過高 · 手臂僵硬夾死 · 移動遲鈍';
+
+                title.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> 常見錯誤預備姿勢警告';
+                list.innerHTML = `
+                    <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <i class="fa-solid fa-xmark text-rose-400 mt-1 font-bold"></i>
+                        <span><b>站得太直（重心過高）：</b> 雙腿伸直導致肌肉反應遲鈍，面對快速飄球時無法立刻側跨步。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <i class="fa-solid fa-xmark text-rose-400 mt-1 font-bold"></i>
+                        <span><b>提早把雙手臂死死鎖緊：</b> 肩膀僵硬，限制了跑步移動的順暢度，極易發生「人未到手先揮」的狀況。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <i class="fa-solid fa-xmark text-rose-400 mt-1 font-bold"></i>
+                        <span><b>全腳貼死地面：</b> 重心落在腳跟，導致啟動反應時間延緩 0.3~0.5 秒。</span>
+                    </li>
+                `;
+            }
+        }
+
+        // Arm Angle Sandbox Diagram
+        function updateArmDemo() {
+            const angleVal = document.getElementById('armAngleInput').value;
+            const forceVal = document.getElementById('armForceInput').value;
+            document.getElementById('angleValText').innerText = angleVal + '°';
+
+            const pushText = forceVal === 'push' ? '腿部微幅迎推' : (forceVal === 'swing' ? '大幅甩臂揮球' : '吸收力道固定');
+            document.getElementById('pushValText').innerText = pushText;
+
+            const canvas = document.getElementById('armDemoCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            // Set bounds
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw Ground
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(20, h - 30);
+            ctx.lineTo(w - 20, h - 30);
+            ctx.stroke();
+
+            // Player Pivot
+            const px = w * 0.3;
+            const py = h - 30;
+
+            // Draw Body Torso
+            ctx.strokeStyle = '#38BDF8';
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(px, py - 60);
+            ctx.lineTo(px + 10, py - 110);
+            ctx.stroke();
+
+            // Head
+            ctx.fillStyle = '#F5A623';
+            ctx.beginPath();
+            ctx.arc(px + 12, py - 125, 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Arm Platform
+            const angleRad = (angleVal * Math.PI) / 180;
+            const armLen = 65;
+            const shoulderX = px + 8;
+            const shoulderY = py - 95;
+
+            const wristX = shoulderX + Math.cos(angleRad) * armLen;
+            const wristY = shoulderY - Math.sin(angleRad) * armLen;
+
+            // Draw Arm
+            ctx.strokeStyle = '#F5A623';
+            ctx.lineWidth = 7;
+            ctx.beginPath();
+            ctx.moveTo(shoulderX, shoulderY);
+            ctx.lineTo(wristX, wristY);
+            ctx.stroke();
+
+            // Sweet spot highlight on forearm
+            const sweetX = shoulderX + Math.cos(angleRad) * (armLen * 0.65);
+            const sweetY = shoulderY - Math.sin(angleRad) * (armLen * 0.65);
+            ctx.fillStyle = '#10B981';
+            ctx.beginPath();
+            ctx.arc(sweetX, sweetY, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Angle indicator arc
+            ctx.strokeStyle = 'rgba(245, 166, 35, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(shoulderX, shoulderY, 30, 0, -angleRad, true);
+            ctx.stroke();
+
+            // Feedback Tag Update
+            const tag = document.getElementById('armFeedbackTag');
+            if (forceVal === 'push' && angleVal >= 35 && angleVal <= 55) {
+                tag.innerText = '完美接球面：球將以舒適弧度回彈給舉球員！';
+                tag.className = 'absolute top-3 right-3 text-[11px] bg-emerald-950/90 border border-emerald-500 text-emerald-300 font-mono px-3 py-1 rounded-md';
+            } else if (forceVal === 'swing') {
+                tag.innerText = '警告：大甩手臂極易導致球向後飛出界！';
+                tag.className = 'absolute top-3 right-3 text-[11px] bg-rose-950/90 border border-rose-500 text-rose-300 font-mono px-3 py-1 rounded-md';
+            } else if (angleVal < 35) {
+                tag.innerText = '角度過低：球彈跳太前平，可能無法過網或過低';
+                tag.className = 'absolute top-3 right-3 text-[11px] bg-amber-950/90 border border-amber-500 text-amber-300 font-mono px-3 py-1 rounded-md';
+            } else {
+                tag.innerText = '角度過陡：球直接向正上方高彈';
+                tag.className = 'absolute top-3 right-3 text-[11px] bg-amber-950/90 border border-amber-500 text-amber-300 font-mono px-3 py-1 rounded-md';
+            }
+        }
+
+        function testArmPass() {
+            playNote('C5');
+            updateArmDemo();
+        }
+
+        // Serve Receive Physics Simulator Engine
+        let simCanvas, simCtx;
+        let simPlayer = { x: 150, y: 0, width: 30, height: 40, armAngle: 45 };
+        let simBall = { x: 50, y: 80, vx: 0, vy: 0, radius: 9, active: false, passed: false };
+        let setterTarget = { x: 380, y: 120, radius: 28 };
+        let gameStats = { total: 0, perfect: 0 };
+        let currentServeMode = 'float';
+
+        function resizeSimCanvas() {
+            simCanvas = document.getElementById('simCanvas');
+            if (!simCanvas) return;
+            simCtx = simCanvas.getContext('2d');
+            simCanvas.width = simCanvas.clientWidth;
+            simCanvas.height = simCanvas.clientHeight;
+
+            simPlayer.y = simCanvas.height - 45;
+            setterTarget.x = simCanvas.width * 0.78;
+            setterTarget.y = simCanvas.height * 0.35;
+
+            drawSim();
+        }
+
+        function drawSim() {
+            if (!simCtx) return;
+            const w = simCanvas.width;
+            const h = simCanvas.height;
+
+            simCtx.clearRect(0, 0, w, h);
+
+            // Draw Volleyball Court Background
+            simCtx.fillStyle = '#0F172A';
+            simCtx.fillRect(0, 0, w, h);
+
+            // Court Floor Line
+            simCtx.strokeStyle = '#334155';
+            simCtx.lineWidth = 4;
+            simCtx.beginPath();
+            simCtx.moveTo(0, h - 15);
+            simCtx.lineTo(w, h - 15);
+            simCtx.stroke();
+
+            // Volleyball Net
+            const netX = w * 0.45;
+            simCtx.strokeStyle = '#F8FAFC';
+            simCtx.lineWidth = 3;
+            simCtx.beginPath();
+            simCtx.moveTo(netX, h - 15);
+            simCtx.lineTo(netX, h - 110);
+            simCtx.stroke();
+
+            // Net Mesh
+            simCtx.strokeStyle = 'rgba(248, 250, 252, 0.2)';
+            simCtx.lineWidth = 1;
+            for (let ny = h - 110; ny < h - 15; ny += 10) {
+                simCtx.beginPath();
+                simCtx.moveTo(netX - 5, ny);
+                simCtx.lineTo(netX + 5, ny + 5);
+                simCtx.stroke();
+            }
+
+            // Draw Target Setter Zone (Green Target Circle)
+            simCtx.fillStyle = 'rgba(16, 185, 129, 0.2)';
+            simCtx.strokeStyle = '#10B981';
+            simCtx.lineWidth = 2;
+            simCtx.beginPath();
+            simCtx.arc(setterTarget.x, setterTarget.y, setterTarget.radius, 0, Math.PI * 2);
+            simCtx.fill();
+            simCtx.stroke();
+
+            // Setter Target Icon / Label
+            simCtx.fillStyle = '#10B981';
+            simCtx.font = '10px Noto Sans TC, sans-font';
+            simCtx.textAlign = 'center';
+            simCtx.fillText('舉球員目標區', setterTarget.x, setterTarget.y - 34);
+
+            // Draw Player (Receiver)
+            simCtx.fillStyle = '#F5A623';
+            simCtx.beginPath();
+            simCtx.arc(simPlayer.x, simPlayer.y - 25, 10, 0, Math.PI * 2);
+            simCtx.fill();
+
+            // Player Torso
+            simCtx.strokeStyle = '#38BDF8';
+            simCtx.lineWidth = 6;
+            simCtx.beginPath();
+            simCtx.moveTo(simPlayer.x, simPlayer.y - 15);
+            simCtx.lineTo(simPlayer.x, simPlayer.y + 10);
+            simCtx.stroke();
+
+            // Player Platform Arm
+            const rad = (simPlayer.armAngle * Math.PI) / 180;
+            const armX = simPlayer.x + Math.cos(rad) * 35;
+            const armY = (simPlayer.y - 10) - Math.sin(rad) * 35;
+
+            simCtx.strokeStyle = '#F5A623';
+            simCtx.lineWidth = 5;
+            simCtx.beginPath();
+            simCtx.moveTo(simPlayer.x, simPlayer.y - 10);
+            simCtx.lineTo(armX, armY);
+            simCtx.stroke();
+
+            // Draw Ball
+            if (simBall.active) {
+                simCtx.fillStyle = '#F5A623';
+                simCtx.beginPath();
+                simCtx.arc(simBall.x, simBall.y, simBall.radius, 0, Math.PI * 2);
+                simCtx.fill();
+
+                simCtx.strokeStyle = '#032B56';
+                simCtx.lineWidth = 2;
+                simCtx.stroke();
+            }
+        }
+
+        function updateSimPhysics() {
+            if (!simBall.active) return;
+
+            // Float serve wobble trajectory
+            if (currentServeMode === 'float' && !simBall.passed) {
+                simBall.vx += (Math.random() - 0.5) * 0.4;
+            }
+
+            simBall.x += simBall.vx;
+            simBall.y += simBall.vy;
+            simBall.vy += 0.18; // Gravity
+
+            // Collision with Net
+            const netX = simCanvas.width * 0.45;
+            if (Math.abs(simBall.x - netX) < 8 && simBall.y > simCanvas.height - 110) {
+                simBall.vx = -simBall.vx * 0.3;
+                playNote('G2');
+            }
+
+            // Collision with Player Platform
+            const distToPlayer = Math.hypot(simBall.x - simPlayer.x, simBall.y - (simPlayer.y - 10));
+            if (distToPlayer < 28 && !simBall.passed) {
+                simBall.passed = true;
+                playNote('E5');
+
+                // Reflect ball based on arm angle
+                const rad = (simPlayer.armAngle * Math.PI) / 180;
+                const speed = 7.5;
+                simBall.vx = Math.cos(rad) * speed;
+                simBall.vy = -Math.sin(rad) * speed;
+
+                gameStats.total++;
+                updateGameStats();
+            }
+
+            // Ball landing check
+            if (simBall.y >= simCanvas.height - 15) {
+                simBall.active = false;
+
+                if (simBall.passed) {
+                    const distToTarget = Math.hypot(simBall.x - setterTarget.x, simBall.y - setterTarget.y);
+                    if (distToTarget <= setterTarget.radius + 20) {
+                        gameStats.perfect++;
+                        playNote('C6');
+                    } else {
+                        playNote('E3');
+                    }
+                    updateGameStats();
+                }
+            }
+
+            drawSim();
+            if (simBall.active) {
+                requestAnimationFrame(updateSimPhysics);
+            }
+        }
+
+        function triggerNewServe() {
+            playNote('G4');
+            simBall.x = 30;
+            simBall.y = 70;
+            simBall.passed = false;
+            simBall.active = true;
+
+            if (currentServeMode === 'float') {
+                simBall.vx = 4.8 + Math.random() * 0.8;
+                simBall.vy = -1.2;
+            } else if (currentServeMode === 'spin') {
+                simBall.vx = 6.8;
+                simBall.vy = -0.5;
+            } else { // short
+                simBall.vx = 3.2;
+                simBall.vy = -3.5;
+            }
+
+            requestAnimationFrame(updateSimPhysics);
+        }
+
+        function movePlayerLeft() {
+            simPlayer.x = Math.max(50, simPlayer.x - 20);
+            drawSim();
+        }
+
+        function movePlayerRight() {
+            simPlayer.x = Math.min(simCanvas.width * 0.42, simPlayer.x + 20);
+            drawSim();
+        }
+
+        function adjustPlatformAngle(delta) {
+            simPlayer.armAngle = Math.max(15, Math.min(75, simPlayer.armAngle + delta));
+            drawSim();
+        }
+
+        function changeServeMode() {
+            currentServeMode = document.getElementById('selectServeType').value;
+            const names = { float: '平托飄球', spin: '強勁跳發', short: '網前短球' };
+            document.getElementById('gameServeType').innerText = names[currentServeMode];
+        }
+
+        function updateGameStats() {
+            document.getElementById('gameTotalPasses').innerText = gameStats.total;
+            const rate = gameStats.total === 0 ? 0 : Math.round((gameStats.perfect / gameStats.total) * 100);
+            document.getElementById('gameAccuracyRate').innerText = rate + '%';
+        }
+
+        function resetGameStats() {
+            gameStats = { total: 0, perfect: 0 };
+            updateGameStats();
+            playNote('C4');
+        }
+
+        // Wave Drill Timer Logic
+        let drillIntervalId = null;
+        let drillTimeLeft = 30.0;
+
+        function toggleDrillTimer() {
+            const btn = document.getElementById('btnStartDrillTimer');
+            if (drillIntervalId) {
+                clearInterval(drillIntervalId);
+                drillIntervalId = null;
+                btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> 繼續訓練組';
+                playNote('G3');
+            } else {
+                playNote('C5');
+                btn.innerHTML = '<i class="fa-solid fa-pause mr-1"></i> 暫停組';
+                const intervalMs = parseInt(document.getElementById('selectDrillInterval').value);
+
+                let soundCounter = 0;
+                drillIntervalId = setInterval(() => {
+                    drillTimeLeft -= 0.1;
+                    if (drillTimeLeft <= 0) {
+                        drillTimeLeft = 0;
+                        clearInterval(drillIntervalId);
+                        drillIntervalId = null;
+                        btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> 開始訓練組';
+                        playNote('C6', "4n");
+                    }
+
+                    soundCounter += 100;
+                    if (soundCounter >= intervalMs && drillTimeLeft > 0) {
+                        soundCounter = 0;
+                        playNote('A5', "16n"); // Serve whistle cue
+                    }
+
+                    document.getElementById('timerDisplay').innerText = `00:${drillTimeLeft.toFixed(1).padStart(4, '0')}`;
+                }, 100);
+            }
+        }
+
+        function resetDrillTimer() {
+            if (drillIntervalId) {
+                clearInterval(drillIntervalId);
+                drillIntervalId = null;
+            }
+            drillTimeLeft = 30.0;
+            document.getElementById('timerDisplay').innerText = '00:30.0';
+            document.getElementById('btnStartDrillTimer').innerHTML = '<i class="fa-solid fa-play mr-1"></i> 開始訓練組';
+            playNote('E4');
+        }
+
+        // Diagnostic Logic
+        function diagnoseIssue(issueType) {
+            playNote('E4');
+            const resultBox = document.getElementById('diagResultText');
+
+            if (issueType === 'back') {
+                resultBox.innerHTML = `
+                    <b class="text-amber-400">病因分析：</b> 主要原因在於「過度揮臂甩球」或「接球時手臂平面抬得太高/太僵硬」。面對速度快或深度深的發球時，球本身的動能已經足夠。<br><br>
+                    <b class="text-emerald-400">矯正處方：</b> 接球時嚴禁用手臂去揮打！壓低雙手手腕與手臂角度（約30°~45°），動作改為「吸收來球力量並將球壓低擋向前方」，重點在於保持手臂鎖死固定。
+                `;
+            } else if (issueType === 'flat') {
+                resultBox.innerHTML = `
+                    <b class="text-amber-400">病因分析：</b> 手臂接球平面壓得過低，或站立重心過高導致觸球點太低，無法給予球足夠的向上拋物線。<br><br>
+                    <b class="text-emerald-400">矯正處方：</b> 屈膝降低重心，觸球前稍微抬高手臂平台角度，並配合雙腳膝蓋微幅延伸登地「迎推」，給予第一球至少高於球網1.5~2公尺的拋物線高度。
+                `;
+            } else if (issueType === 'slow') {
+                resultBox.innerHTML = `
+                    <b class="text-amber-400">病因分析：</b> 預備姿勢時腳跟貼死地面，且過早把手臂伸直夾死，導致全身筋肉僵硬、第一步無法迅速爆發。<br><br>
+                    <b class="text-emerald-400">矯正處方：</b> 重心前傾至「大拇指球前腳掌」，腳跟輕懸空；等待球來時「手臂先屈肘放鬆」，等眼睛確認落點移動到位後，擊球前一瞬間再併攏伸直。
+                `;
+            }
+        }
+
+        // Quiz Logic
+        function checkQuiz(btn, isCorrect) {
+            playNote(isCorrect ? 'C5' : 'G3');
+            const parent = btn.closest('.q-card');
+            const feedback = parent.querySelector('.q-feedback');
+            const btns = parent.querySelectorAll('button');
+
+            btns.forEach(b => b.disabled = true);
+            feedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                btn.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-300', 'font-bold');
+                feedback.className = 'q-feedback mt-3 p-3 rounded-xl text-xs leading-relaxed bg-emerald-950/80 text-emerald-300 border border-emerald-500/40';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check mr-1 text-emerald-400"></i> <b>完全正確！</b> 掌握了排球接發球的核心概念。';
+            } else {
+                btn.classList.add('bg-rose-950', 'border-rose-500', 'text-rose-300');
+                feedback.className = 'q-feedback mt-3 p-3 rounded-xl text-xs leading-relaxed bg-amber-950/80 text-amber-300 border border-amber-500/40';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-info mr-1 text-amber-400"></i> <b>觀念釐清：</b> 請複習核心三觀念：預備時手臂需放鬆屈肘，以利移動；擊球時配合腿部迎推力量。';
+            }
+        }
+
+        // Window Event Bindings
+        window.onload = function() {
+            resizeSimCanvas();
+            updateArmDemo();
+
+            // Keyboard navigation for simulator
+            window.addEventListener('keydown', (e) => {
+                const simSection = document.getElementById('tab-sim');
+                if (!simSection.classList.contains('hidden')) {
+                    if (e.key === 'ArrowLeft') movePlayerLeft();
+                    if (e.key === 'ArrowRight') movePlayerRight();
+                    if (e.key === ' ') triggerNewServe();
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                resizeSimCanvas();
+                updateArmDemo();
+            });
+        };
+    </script>
+</body>
+</html>
