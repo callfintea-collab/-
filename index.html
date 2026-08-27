@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>朱自清《背影》互動文學探索</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Chinese Calligraphy & Clean Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tone.js for ambient sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amberCustom: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        ink: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        orangeCustom: '#f97316',
+                        violetCustom: '#4c1d95',
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: #fcfbf7;
+            color: #2b2b2b;
+        }
+        .sans-font {
+            font-family: 'Inter', sans-serif;
+        }
+        .highlight-action { background-color: #fef08a; border-bottom: 2px solid #ca8a04; cursor: pointer; }
+        .highlight-color { background-color: #ffedd5; border-bottom: 2px solid #ea580c; cursor: pointer; }
+        .highlight-emotion { background-color: #f3e8ff; border-bottom: 2px solid #9333ea; cursor: pointer; }
+        .highlight-symbol { background-color: #dcfce7; border-bottom: 2px solid #16a34a; cursor: pointer; }
+        
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-orange-200 selection:text-orange-900">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-stone-900/95 backdrop-blur text-stone-100 border-b border-amber-900/40 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    背
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-wide text-amber-100">朱自清《背影》</h1>
+                    <p class="text-xs text-amber-400/80 sans-font hidden sm:block">1925年創作 · 1917年浦口車站的回憶</p>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex space-x-1 lg:space-x-2 text-sm font-medium">
+                <button onclick="switchTab('tab-overview')" id="btn-tab-overview" class="nav-btn px-3 py-2 rounded-lg transition-colors bg-amber-800/60 text-amber-200">
+                    <i class="fa-solid fa-book-open mr-1.5"></i>概覽導讀
+                </button>
+                <button onclick="switchTab('tab-author')" id="btn-tab-author" class="nav-btn px-3 py-2 rounded-lg transition-colors hover:bg-stone-800 text-stone-300">
+                    <i class="fa-brands fa-instagram mr-1.5 text-rose-400"></i>作者IG Profile
+                </button>
+                <button onclick="switchTab('tab-scene')" id="btn-tab-scene" class="nav-btn px-3 py-2 rounded-lg transition-colors hover:bg-stone-800 text-stone-300">
+                    <i class="fa-solid fa-train-subway mr-1.5"></i>經典重現·買橘
+                </button>
+                <button onclick="switchTab('tab-text')" id="btn-tab-text" class="nav-btn px-3 py-2 rounded-lg transition-colors hover:bg-stone-800 text-stone-300">
+                    <i class="fa-solid fa-highlighter mr-1.5"></i>原文賞析
+                </button>
+                <button onclick="switchTab('tab-emotion')" id="btn-tab-emotion" class="nav-btn px-3 py-2 rounded-lg transition-colors hover:bg-stone-800 text-stone-300">
+                    <i class="fa-solid fa-heart-pulse mr-1.5"></i>父子情感圖譜
+                </button>
+                <button onclick="switchTab('tab-history')" id="btn-tab-history" class="nav-btn px-3 py-2 rounded-lg transition-colors hover:bg-stone-800 text-stone-300">
+                    <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>真實背景與和解
+                </button>
+                <button onclick="switchTab('tab-quiz')" id="btn-tab-quiz" class="nav-btn px-3 py-2 rounded-lg transition-colors hover:bg-stone-800 text-stone-300">
+                    <i class="fa-solid fa-graduation-cap mr-1.5"></i>深度問答
+                </button>
+            </nav>
+
+            <div class="flex items-center space-x-2">
+                <button id="soundToggle" onclick="toggleAudio()" class="p-2 rounded-lg text-stone-400 hover:text-amber-300 hover:bg-stone-800 transition" title="背景音樂/音效">
+                    <i class="fa-solid fa-volume-xmark text-lg" id="soundIcon"></i>
+                </button>
+                <!-- Mobile menu button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-stone-300 hover:bg-stone-800">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-stone-900 border-t border-stone-800 px-4 pt-2 pb-4 space-y-1 text-sm">
+            <button onclick="switchTab('tab-overview'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded text-stone-200 hover:bg-stone-800"><i class="fa-solid fa-book-open w-6"></i>概覽導讀</button>
+            <button onclick="switchTab('tab-author'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded text-stone-200 hover:bg-stone-800"><i class="fa-brands fa-instagram text-rose-400 w-6"></i>作者IG Profile</button>
+            <button onclick="switchTab('tab-scene'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded text-stone-200 hover:bg-stone-800"><i class="fa-solid fa-train-subway w-6"></i>經典重現·買橘</button>
+            <button onclick="switchTab('tab-text'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded text-stone-200 hover:bg-stone-800"><i class="fa-solid fa-highlighter w-6"></i>原文賞析</button>
+            <button onclick="switchTab('tab-emotion'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded text-stone-200 hover:bg-stone-800"><i class="fa-solid fa-heart-pulse w-6"></i>父子情感圖譜</button>
+            <button onclick="switchTab('tab-history'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded text-stone-200 hover:bg-stone-800"><i class="fa-solid fa-clock-rotate-left w-6"></i>真實背景與和解</button>
+            <button onclick="switchTab('tab-quiz'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded text-stone-200 hover:bg-stone-800"><i class="fa-solid fa-graduation-cap w-6"></i>深度問答</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ==================== TAB: AUTHOR INSTAGRAM PROFILE ==================== -->
+        <section id="tab-author" class="tab-content hidden fade-in space-y-8">
+            <div class="max-w-4xl mx-auto bg-white border border-stone-200 rounded-3xl shadow-xl overflow-hidden">
+                
+                <!-- Instagram Header Profile Info -->
+                <div class="p-6 sm:p-10 border-b border-stone-200 bg-stone-50/50">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-10">
+                        
+                        <!-- IG Avatar with Gradient Ring -->
+                        <div class="relative group cursor-pointer" onclick="openIgStory()">
+                            <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-full p-1 bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 shadow-md">
+                                <div class="w-full h-full rounded-full border-2 border-white bg-stone-900 flex items-center justify-center text-stone-100 overflow-hidden relative">
+                                    <div class="w-full h-full bg-stone-800 flex flex-col items-center justify-center p-2 text-center">
+                                        <i class="fa-solid fa-feather-pointed text-3xl sm:text-4xl text-amber-400 mb-1"></i>
+                                        <span class="text-[10px] font-serif tracking-widest text-stone-300">朱自清</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="absolute bottom-1 right-1 bg-sky-500 text-white rounded-full p-1 text-xs border-2 border-white shadow" title="官方認證作者">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                        </div>
+
+                        <!-- Profile Details -->
+                        <div class="flex-grow text-center sm:text-left space-y-4">
+                            
+                            <!-- Username & Buttons -->
+                            <div class="flex flex-col sm:flex-row items-center gap-3">
+                                <h2 class="text-xl sm:text-2xl font-bold text-stone-900 sans-font flex items-center gap-2">
+                                    zhu.ziqing_official
+                                    <i class="fa-solid fa-circle-check text-sky-500 text-lg" title="文學界經典認證"></i>
+                                </h2>
+                                <div class="flex items-center gap-2 sans-font text-xs">
+                                    <button id="igFollowBtn" onclick="toggleIgFollow()" class="px-5 py-2 bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-lg shadow transition">
+                                        <i class="fa-solid fa-user-plus mr-1"></i> 追蹤
+                                    </button>
+                                    <button onclick="switchTab('tab-scene')" class="px-4 py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 font-semibold rounded-lg transition">
+                                        發送訊息
+                                    </button>
+                                    <button onclick="shareProfile()" class="px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg border border-stone-300 transition">
+                                        <i class="fa-solid fa-share-nodes"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- IG Stats Count -->
+                            <div class="flex justify-center sm:justify-start gap-8 text-sm sans-font py-1 border-y border-stone-200 sm:border-none">
+                                <div><span class="font-bold text-stone-900">50</span> 貼文 (歲月)</div>
+                                <div><span class="font-bold text-stone-900">1925</span> 創作《背影》</div>
+                                <div><span class="font-bold text-stone-900">100M+</span> 讀者愛戴</div>
+                            </div>
+
+                            <!-- Bio Section -->
+                            <div class="text-sm text-stone-800 leading-relaxed font-serif space-y-1">
+                                <p class="font-bold text-base text-amber-900">朱自清（原名自華，字佩弦）</p>
+                                <p class="text-stone-500 text-xs sans-font">現代散文家 · 詩人 · 學者 · 國立清華大學中文系教授</p>
+                                <p class="text-stone-700 font-sans text-xs pt-1">
+                                    📖 著有《背影》、《荷塘月色》、《匆匆》、《歐遊雜記》<br>
+                                    📍 祖籍浙江紹興，長於揚州｜北大哲學系畢業<br>
+                                    ✨ 筆觸細緻溫柔，風格素樸清麗，傳遞深厚人文風骨與民族氣節
+                                </p>
+                                <p class="text-sky-600 text-xs font-mono pt-1">
+                                    <a href="#tab-overview" onclick="switchTab('tab-overview')" class="hover:underline">linktr.ee/zhu_ziqing_literary</a>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Story Highlights Bar -->
+                    <div class="flex gap-6 overflow-x-auto pt-8 pb-2 custom-scrollbar justify-start sm:justify-center">
+                        <div onclick="openIgPost('post-1')" class="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0">
+                            <div class="w-16 h-16 rounded-full p-0.5 border-2 border-stone-300 group-hover:border-amber-500 transition">
+                                <div class="w-full h-full rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-train"></i>
+                                </div>
+                            </div>
+                            <span class="text-[11px] sans-font font-medium text-stone-700">1917浦口</span>
+                        </div>
+
+                        <div onclick="openIgPost('post-4')" class="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0">
+                            <div class="w-16 h-16 rounded-full p-0.5 border-2 border-stone-300 group-hover:border-amber-500 transition">
+                                <div class="w-full h-full rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-water"></i>
+                                </div>
+                            </div>
+                            <span class="text-[11px] sans-font font-medium text-stone-700">荷塘月色</span>
+                        </div>
+
+                        <div onclick="openIgPost('post-5')" class="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0">
+                            <div class="w-16 h-16 rounded-full p-0.5 border-2 border-stone-300 group-hover:border-amber-500 transition">
+                                <div class="w-full h-full rounded-full bg-rose-100 text-rose-800 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-hourglass-half"></i>
+                                </div>
+                            </div>
+                            <span class="text-[11px] sans-font font-medium text-stone-700">匆匆歲月</span>
+                        </div>
+
+                        <div onclick="openIgPost('post-2')" class="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0">
+                            <div class="w-16 h-16 rounded-full p-0.5 border-2 border-stone-300 group-hover:border-amber-500 transition">
+                                <div class="w-full h-full rounded-full bg-purple-100 text-purple-800 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                            </div>
+                            <span class="text-[11px] sans-font font-medium text-stone-700">北大歲月</span>
+                        </div>
+
+                        <div onclick="openIgPost('post-6')" class="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0">
+                            <div class="w-16 h-16 rounded-full p-0.5 border-2 border-stone-300 group-hover:border-amber-500 transition">
+                                <div class="w-full h-full rounded-full bg-stone-200 text-stone-800 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                            </div>
+                            <span class="text-[11px] sans-font font-medium text-stone-700">民族氣節</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instagram Grid Navigation Tabs -->
+                <div class="flex border-t border-b border-stone-200 text-xs font-bold tracking-wider uppercase sans-font text-stone-500">
+                    <button class="flex-1 py-3 border-t-2 border-stone-900 text-stone-900 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-table-cells text-base"></i>
+                        <span>貼文 (Posts)</span>
+                    </button>
+                    <button class="flex-1 py-3 border-t-2 border-transparent hover:text-stone-800 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-film text-base"></i>
+                        <span>經典短文 (Reels)</span>
+                    </button>
+                    <button class="flex-1 py-3 border-t-2 border-transparent hover:text-stone-800 flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-id-badge text-base"></i>
+                        <span>評論與評價</span>
+                    </button>
+                </div>
+
+                <!-- Instagram Posts Grid (3 Columns) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 bg-stone-100 p-1">
+                    
+                    <!-- Post 1: 背影 (1925) -->
+                    <div onclick="openIgPost('post-1')" class="relative group aspect-square bg-gradient-to-br from-amber-900 to-stone-900 p-6 flex flex-col justify-between text-white cursor-pointer overflow-hidden rounded">
+                        <div class="text-xs font-mono text-amber-400">1925.10.15 · 北京清華</div>
+                        <div class="my-auto text-center space-y-2">
+                            <div class="text-3xl font-serif font-black tracking-widest text-amber-100">背影</div>
+                            <p class="text-xs text-stone-300 font-serif line-clamp-2">「我最不能忘記的是他的背影」</p>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-amber-300/80 sans-font">
+                            <span><i class="fa-solid fa-location-dot mr-1"></i>浦口車站</span>
+                            <span class="bg-amber-800/80 px-2 py-0.5 rounded text-[10px]">散文代表作</span>
+                        </div>
+                        <!-- Hover Overlay -->
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-bold sans-font">
+                            <span><i class="fa-solid fa-heart text-rose-500 mr-2"></i>98.2K</span>
+                            <span><i class="fa-solid fa-comment mr-2"></i>1,925</span>
+                        </div>
+                    </div>
+
+                    <!-- Post 2: 五四與北大 -->
+                    <div onclick="openIgPost('post-2')" class="relative group aspect-square bg-gradient-to-br from-slate-800 to-indigo-950 p-6 flex flex-col justify-between text-white cursor-pointer overflow-hidden rounded">
+                        <div class="text-xs font-mono text-sky-400">1920 · 北京大學</div>
+                        <div class="my-auto text-center space-y-2">
+                            <div class="text-xl font-bold font-serif text-sky-100">五四新文學</div>
+                            <p class="text-xs text-slate-300 line-clamp-3">「用白話寫出真摯情懷，開創現代散文白描風格」</p>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-sky-300/80 sans-font">
+                            <span><i class="fa-solid fa-book-open mr-1"></i>哲學系畢業</span>
+                            <span class="bg-sky-900/80 px-2 py-0.5 rounded text-[10px]">新詩與散文</span>
+                        </div>
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-bold sans-font">
+                            <span><i class="fa-solid fa-heart text-rose-500 mr-2"></i>45.1K</span>
+                            <span><i class="fa-solid fa-comment mr-2"></i>820</span>
+                        </div>
+                    </div>
+
+                    <!-- Post 3: 揚州成長與故鄉 -->
+                    <div onclick="openIgPost('post-3')" class="relative group aspect-square bg-gradient-to-br from-emerald-900 to-teal-950 p-6 flex flex-col justify-between text-white cursor-pointer overflow-hidden rounded">
+                        <div class="text-xs font-mono text-emerald-300">1898-1916 · 揚州歲月</div>
+                        <div class="my-auto text-center space-y-2">
+                            <div class="text-2xl font-bold font-serif text-emerald-100">揚州記憶</div>
+                            <p class="text-xs text-emerald-200/90 font-serif">「生於江蘇東海，長於揚州，自稱揚州人」</p>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-emerald-400 sans-font">
+                            <span><i class="fa-solid fa-house-user mr-1"></i>家鄉懷念</span>
+                            <span class="bg-emerald-800/80 px-2 py-0.5 rounded text-[10px]">風土文學</span>
+                        </div>
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-bold sans-font">
+                            <span><i class="fa-solid fa-heart text-rose-500 mr-2"></i>32.8K</span>
+                            <span><i class="fa-solid fa-comment mr-2"></i>412</span>
+                        </div>
+                    </div>
+
+                    <!-- Post 4: 荷塘月色 (1927) -->
+                    <div onclick="openIgPost('post-4')" class="relative group aspect-square bg-gradient-to-br from-teal-900 via-stone-900 to-slate-900 p-6 flex flex-col justify-between text-white cursor-pointer overflow-hidden rounded">
+                        <div class="text-xs font-mono text-teal-300">1927.07 · 清華園</div>
+                        <div class="my-auto text-center space-y-2">
+                            <div class="text-2xl font-serif font-bold text-teal-100">荷塘月色</div>
+                            <p class="text-xs text-stone-300 font-serif italic">「這幾天心裡頗不寧靜...」</p>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-teal-300 sans-font">
+                            <span><i class="fa-solid fa-moon mr-1"></i>夜游荷塘</span>
+                            <span class="bg-teal-900/80 px-2 py-0.5 rounded text-[10px]">抒情散文</span>
+                        </div>
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-bold sans-font">
+                            <span><i class="fa-solid fa-heart text-rose-500 mr-2"></i>88.9K</span>
+                            <span><i class="fa-solid fa-comment mr-2"></i>1,420</span>
+                        </div>
+                    </div>
+
+                    <!-- Post 5: 匆匆 (1922) -->
+                    <div onclick="openIgPost('post-5')" class="relative group aspect-square bg-gradient-to-br from-rose-950 via-purple-950 to-stone-900 p-6 flex flex-col justify-between text-white cursor-pointer overflow-hidden rounded">
+                        <div class="text-xs font-mono text-rose-300">1922.03 · 燕子去了</div>
+                        <div class="my-auto text-center space-y-2">
+                            <div class="text-2xl font-serif font-bold text-rose-100">匆匆</div>
+                            <p class="text-xs text-rose-200/90 font-serif">「洗手的時候，日子從水盆裡過去...」</p>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-rose-300 sans-font">
+                            <span><i class="fa-solid fa-clock mr-1"></i>時間哲思</span>
+                            <span class="bg-rose-900/80 px-2 py-0.5 rounded text-[10px]">名篇必讀</span>
+                        </div>
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-bold sans-font">
+                            <span><i class="fa-solid fa-heart text-rose-500 mr-2"></i>76.4K</span>
+                            <span><i class="fa-solid fa-comment mr-2"></i>950</span>
+                        </div>
+                    </div>
+
+                    <!-- Post 6: 骨氣與民族氣節 (1948) -->
+                    <div onclick="openIgPost('post-6')" class="relative group aspect-square bg-gradient-to-br from-stone-900 to-amber-950 p-6 flex flex-col justify-between text-white cursor-pointer overflow-hidden rounded">
+                        <div class="text-xs font-mono text-amber-400">1898 - 1948 · 骨氣</div>
+                        <div class="my-auto text-center space-y-2">
+                            <div class="text-xl font-bold font-serif text-amber-100">不領美國救濟糧</div>
+                            <p class="text-xs text-stone-300">「展現知識份子的至高人格與民族風骨」</p>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-amber-300 sans-font">
+                            <span><i class="fa-solid fa-award mr-1"></i>高尚人格</span>
+                            <span class="bg-stone-800 px-2 py-0.5 rounded text-[10px]">精神永存</span>
+                        </div>
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-bold sans-font">
+                            <span><i class="fa-solid fa-heart text-rose-500 mr-2"></i>120K</span>
+                            <span><i class="fa-solid fa-comment mr-2"></i>3,100</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Instagram Interactive Post View Modal -->
+        <div id="igModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
+                
+                <!-- Left Visual Graphic Area -->
+                <div id="igModalVisual" class="w-full md:w-1/2 bg-stone-900 p-8 text-white flex flex-col justify-between min-h-[250px] relative">
+                    <div class="text-xs text-amber-400 font-mono" id="modalPostDate">1925.10.15</div>
+                    <div class="my-auto space-y-3">
+                        <h3 id="modalPostTitle" class="text-3xl font-serif font-bold text-amber-100">背影</h3>
+                        <p id="modalPostQuote" class="text-sm font-serif leading-relaxed text-stone-300 italic">「我最不能忘記的是他的背影」</p>
+                    </div>
+                    <div id="modalPostTag" class="text-xs text-stone-400 sans-font">📍 南京浦口車站</div>
+                </div>
+
+                <!-- Right Comments & Caption Area -->
+                <div class="w-full md:w-1/2 flex flex-col justify-between p-6 bg-white font-sans text-stone-800">
+                    
+                    <!-- IG Header inside Modal -->
+                    <div class="flex items-center justify-between border-b pb-3 mb-3">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-amber-700 text-white flex items-center justify-center font-serif text-xs font-bold">
+                                朱
+                            </div>
+                            <div>
+                                <div class="font-bold text-xs flex items-center gap-1">
+                                    zhu.ziqing_official
+                                    <i class="fa-solid fa-circle-check text-sky-500 text-[10px]"></i>
+                                </div>
+                                <div id="modalPostLocation" class="text-[10px] text-stone-500">南京浦口車站</div>
+                            </div>
+                        </div>
+                        <button onclick="closeIgModal()" class="text-stone-400 hover:text-stone-700 text-lg">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Scrollable Caption and Mock Comments -->
+                    <div class="flex-grow overflow-y-auto space-y-3 text-xs leading-relaxed custom-scrollbar max-h-[280px] pr-2">
+                        <div id="modalPostCaption" class="text-stone-700 space-y-1">
+                            <span class="font-bold text-stone-900">zhu.ziqing_official</span>
+                            <span>寫於1925年秋清華園。回憶八年前冬日祖母去世、父親失業，浦口車站送別的場景。買橘子時穿過鐵道的背影，至今常浮現在眼眶……</span>
+                        </div>
+
+                        <div class="border-t border-stone-100 pt-3 space-y-2 text-stone-600">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <span class="font-bold text-stone-900 mr-1">葉聖陶 (Ye Shengtao):</span>
+                                    <span>佩弦的文章總是這樣真摯素樸，動人心魄！</span>
+                                </div>
+                                <i class="fa-regular fa-heart text-stone-400 text-[10px] mt-1 cursor-pointer hover:text-rose-500"></i>
+                            </div>
+
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <span class="font-bold text-stone-900 mr-1">父親 (朱鴻鈞):</span>
+                                    <span>（1928年在揚州讀完全文，老花鏡旁泛起淚光...）</span>
+                                </div>
+                                <i class="fa-solid fa-heart text-rose-500 text-[10px] mt-1"></i>
+                            </div>
+
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <span class="font-bold text-stone-900 mr-1">文學讀者:</span>
+                                    <span>從小學讀到大學，每次重讀《背影》都有截然不同的深刻體會。</span>
+                                </div>
+                                <i class="fa-regular fa-heart text-stone-400 text-[10px] mt-1 cursor-pointer hover:text-rose-500"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Like and Interaction Controls -->
+                    <div class="border-t pt-3 mt-2 space-y-2">
+                        <div class="flex justify-between text-lg">
+                            <div class="flex space-x-4 text-stone-700">
+                                <button id="modalLikeBtn" onclick="toggleModalLike()" class="hover:text-rose-500 transition">
+                                    <i class="fa-regular fa-heart" id="modalHeartIcon"></i>
+                                </button>
+                                <button class="hover:text-sky-500"><i class="fa-regular fa-comment"></i></button>
+                                <button class="hover:text-emerald-500"><i class="fa-regular fa-paper-plane"></i></button>
+                            </div>
+                            <button class="hover:text-amber-600"><i class="fa-regular fa-bookmark"></i></button>
+                        </div>
+
+                        <div class="font-bold text-xs text-stone-900" id="modalLikesCount">
+                            讚數：98,240 次
+                        </div>
+
+                        <!-- Comment input -->
+                        <div class="flex items-center gap-2 pt-1 border-t border-stone-100">
+                            <input type="text" placeholder="留言給朱自清先生..." class="w-full text-xs py-1 border-none focus:outline-none text-stone-700">
+                            <button class="text-xs font-bold text-sky-500 hover:text-sky-600">發佈</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TAB 1: OVERVIEW ==================== -->
+        <section id="tab-overview" class="tab-content fade-in space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative rounded-2xl bg-gradient-to-r from-stone-900 via-amber-950 to-stone-900 text-stone-100 p-6 sm:p-10 shadow-2xl overflow-hidden border border-amber-900/30">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-amber-500 font-serif text-9xl pointer-events-none select-none">
+                    背影
+                </div>
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs sm:text-sm font-medium border border-amber-500/30">
+                        <i class="fa-regular fa-calendar"></i> 寫於 1925 年 10 月 · 回憶 1917 年冬
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-amber-100 leading-tight">
+                        「我與父親不相見已有二年餘了，我最不能忘記的是他的背影。」
+                    </h2>
+                    <p class="text-stone-300 text-base sm:text-lg leading-relaxed font-normal">
+                        那一年，祖母去世，父親失業，家境一片慘淡。在南京浦口火車站的離別時刻，父親穿著臃腫的黑布大馬褂，艱難地跨越鐵道、爬上月台去買朱紅色的橘子……這個背影，成了中國現代文學中最動人的父愛象徵。
+                    </p>
+                    <div class="pt-4 flex flex-wrap gap-4">
+                        <button onclick="switchTab('tab-scene')" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-medium rounded-xl shadow-lg transition flex items-center gap-2">
+                            <i class="fa-solid fa-play"></i> 開始互動體驗：車站買橘
+                        </button>
+                        <button onclick="switchTab('tab-text')" class="px-5 py-2.5 bg-stone-800 hover:bg-stone-700 text-amber-200 font-medium rounded-xl border border-amber-700/40 transition flex items-center gap-2">
+                            <i class="fa-solid fa-scroll"></i> 精讀經典片段
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Summary Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: 時代與家境背景 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-stone-200 hover:shadow-lg transition">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-snowflake"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-900 mb-2">1917 慘淡冬日</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        祖母不幸去世，父親朱鴻鈞遭逢失業。家道中落，慘澹的家境與滿院狼藉，為浦口車站的送別鋪墊了沉重壓抑的時代氛圍。
+                    </p>
+                </div>
+
+                <!-- Card 2: 浦口車站買橘 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-stone-200 hover:shadow-lg transition">
+                    <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-800 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-900 mb-2">穿鐵道爬月台</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        肥胖的父親堅持親自為兒子買橘子。穿著黑布大馬褂、深青布棉袍，探身下鐵道、艱難攀爬月台，這段細膩動作定格了至深父愛。
+                    </p>
+                </div>
+
+                <!-- Card 3: 兒子的醒悟與思念 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-stone-200 hover:shadow-lg transition">
+                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-900 mb-2">愧疚與理解</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        作者從最初自以為是的「聰明與自傲」（抱怨父親講價、嫌其說話不漂亮），到看見父親背影時豁然醒悟，化為深深的眼淚與思念。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Themes Quick Nav Bar -->
+            <div class="bg-stone-100 rounded-2xl p-6 border border-stone-200">
+                <h3 class="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-compass text-amber-700"></i> 你想深入了解哪些主題？
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <a onclick="switchTab('tab-scene')" class="cursor-pointer bg-white p-4 rounded-xl border border-stone-200 hover:border-amber-500 hover:shadow transition group flex items-start space-x-3">
+                        <i class="fa-solid fa-map-location-dot text-amber-600 text-xl mt-1 group-hover:scale-110 transition"></i>
+                        <div>
+                            <span class="font-bold text-stone-800 block text-sm">經典買橘子片段重現</span>
+                            <span class="text-xs text-stone-500">動態分解父親穿過鐵道與攀爬月台的四個步驟</span>
+                        </div>
+                    </a>
+                    <a onclick="switchTab('tab-text')" class="cursor-pointer bg-white p-4 rounded-xl border border-stone-200 hover:border-amber-500 hover:shadow transition group flex items-start space-x-3">
+                        <i class="fa-solid fa-feather text-amber-600 text-xl mt-1 group-hover:scale-110 transition"></i>
+                        <div>
+                            <span class="font-bold text-stone-800 block text-sm">寫作藝術手法與特色</span>
+                            <span class="text-xs text-stone-500">動詞運用、視覺色彩對比與「背影」象徵分析</span>
+                        </div>
+                    </a>
+                    <a onclick="switchTab('tab-history')" class="cursor-pointer bg-white p-4 rounded-xl border border-stone-200 hover:border-amber-500 hover:shadow transition group flex items-start space-x-3">
+                        <i class="fa-solid fa-people-roof text-amber-600 text-xl mt-1 group-hover:scale-110 transition"></i>
+                        <div>
+                            <span class="font-bold text-stone-800 block text-sm">作者與父親的真實關係</span>
+                            <span class="text-xs text-stone-500">父子隔閡由來，以及文章如何帶來最終和解</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: INTERACTIVE SCENE ==================== -->
+        <section id="tab-scene" class="tab-content hidden fade-in space-y-6">
+            <div class="bg-stone-900 text-stone-100 p-6 sm:p-8 rounded-2xl shadow-xl border border-amber-900/30">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 text-xs rounded-full border border-amber-500/30">
+                            1917年冬 · 南京浦口車站
+                        </span>
+                        <h2 class="text-2xl font-bold text-amber-100 mt-1">經典重現：買橘子的背影</h2>
+                    </div>
+                    <div class="flex items-center gap-2 sans-font">
+                        <button id="prevStepBtn" onclick="changeSceneStep(-1)" class="px-3 py-1.5 bg-stone-800 hover:bg-stone-700 rounded-lg text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-chevron-left mr-1"></i> 上一步
+                        </button>
+                        <span id="stepIndicator" class="text-xs text-stone-400 font-mono px-2">步驟 1 / 4</span>
+                        <button id="nextStepBtn" onclick="changeSceneStep(1)" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm">
+                            下一步 <i class="fa-solid fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Visual Interactive Canvas/Illustration Simulation -->
+                <div class="relative w-full h-80 sm:h-96 bg-gradient-to-b from-slate-900 via-stone-900 to-amber-950 rounded-xl overflow-hidden border border-stone-800 flex flex-col justify-between p-4 shadow-inner">
+                    <!-- Background Atmosphere (Snow/Cold) -->
+                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    
+                    <!-- Top Train Info -->
+                    <div class="relative z-10 flex justify-between items-center text-xs text-stone-400 font-mono border-b border-stone-800/80 pb-2">
+                        <span><i class="fa-solid fa-train"></i> 津浦鐵路 浦口站</span>
+                        <span id="sceneTime">天氣：深冬嚴寒 · 祖母喪畢</span>
+                    </div>
+
+                    <!-- Station Graphic Scene -->
+                    <div class="relative z-10 my-auto flex flex-col items-center justify-center">
+                        
+                        <!-- Track and Platform visual Representation -->
+                        <div class="w-full max-w-2xl relative h-40 border-b-4 border-stone-600 flex flex-col justify-end">
+                            
+                            <!-- Opposite Platform -->
+                            <div class="absolute right-0 top-2 w-1/3 h-12 bg-stone-700 border-t-2 border-amber-600/60 rounded-tl-md flex items-center justify-center text-xs text-stone-300">
+                                <i class="fa-solid fa-store text-amber-500 mr-1.5"></i> 水果攤（朱紅橘子）
+                            </div>
+
+                            <!-- Railway Tracks -->
+                            <div class="w-full h-6 bg-stone-800/80 flex items-center justify-around border-t border-b border-stone-700">
+                                <div class="w-full h-1 bg-amber-900/60 flex justify-between px-2">
+                                    <div class="w-2 h-full bg-stone-600"></div><div class="w-2 h-full bg-stone-600"></div><div class="w-2 h-full bg-stone-600"></div><div class="w-2 h-full bg-stone-600"></div><div class="w-2 h-full bg-stone-600"></div><div class="w-2 h-full bg-stone-600"></div>
+                                </div>
+                            </div>
+
+                            <!-- Father Avatar Positioned dynamically -->
+                            <div id="fatherAvatar" class="absolute transition-all duration-700 ease-in-out flex flex-col items-center" style="left: 15%; bottom: 20px;">
+                                <div class="text-2xl text-amber-400 filter drop-shadow-md animate-bounce" id="fatherIcon">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                </div>
+                                <span class="text-[10px] bg-amber-900/90 text-amber-200 px-1.5 py-0.5 rounded shadow mt-1 whitespace-nowrap">父親 (穿大馬褂)</span>
+                            </div>
+
+                            <!-- Train / Carriage (Author Inside) -->
+                            <div class="absolute left-0 bottom-6 w-1/4 h-20 bg-stone-800 border border-stone-600 rounded-r-lg flex flex-col justify-between p-2">
+                                <div class="text-[10px] text-amber-300 font-mono"><i class="fa-solid fa-train-car"></i> 靠椅車廂</div>
+                                <div class="flex items-center space-x-1">
+                                    <div class="w-4 h-4 bg-amber-500/30 rounded-full flex items-center justify-center text-[10px] text-amber-200">清</div>
+                                    <span class="text-[10px] text-stone-400">作者在車內凝視</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Interactive Step Details Card -->
+                    <div class="relative z-10 bg-stone-800/90 backdrop-blur rounded-lg p-4 border border-stone-700">
+                        <div class="flex items-start gap-3">
+                            <span id="stepBadge" class="px-2.5 py-1 bg-amber-600 text-white rounded font-bold text-xs">一</span>
+                            <div class="flex-grow">
+                                <h4 id="stepTitle" class="text-amber-200 font-bold text-base mb-1">叮嚀與決定：父親堅持親自前往</h4>
+                                <p id="stepDesc" class="text-stone-300 text-xs sm:text-sm leading-relaxed">
+                                    父親穿著黑布大馬褂、深青布棉袍。本已僱好腳夫，卻仍不放心，執意要穿過鐵道去對面月台買橘子。「我買幾個橘子去。你就在此地，不要走動。」
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Button Controls -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 sans-font">
+                    <button onclick="setSceneStep(0)" class="step-btn text-left p-3 rounded-xl border bg-amber-900/40 border-amber-600/50 text-amber-200">
+                        <div class="text-xs font-bold uppercase text-amber-400 mb-1">Step 1</div>
+                        <div class="text-xs sm:text-sm font-semibold">1. 執意親去</div>
+                    </button>
+                    <button onclick="setSceneStep(1)" class="step-btn text-left p-3 rounded-xl border bg-stone-800/60 border-stone-700 text-stone-300 hover:bg-stone-800">
+                        <div class="text-xs font-bold uppercase text-stone-400 mb-1">Step 2</div>
+                        <div class="text-xs sm:text-sm font-semibold">2. 穿過鐵道</div>
+                    </button>
+                    <button onclick="setSceneStep(2)" class="step-btn text-left p-3 rounded-xl border bg-stone-800/60 border-stone-700 text-stone-300 hover:bg-stone-800">
+                        <div class="text-xs font-bold uppercase text-stone-400 mb-1">Step 3</div>
+                        <div class="text-xs sm:text-sm font-semibold">3. 攀爬月台</div>
+                    </button>
+                    <button onclick="setSceneStep(3)" class="step-btn text-left p-3 rounded-xl border bg-stone-800/60 border-stone-700 text-stone-300 hover:bg-stone-800">
+                        <div class="text-xs font-bold uppercase text-stone-400 mb-1">Step 4</div>
+                        <div class="text-xs sm:text-sm font-semibold">4. 抱橘歸來與告別</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detail Breakdown Card -->
+            <div id="stepDetailBox" class="bg-white p-6 rounded-2xl shadow-md border border-stone-200 space-y-3">
+                <h3 class="text-lg font-bold text-stone-900 flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass-location text-amber-700"></i> 細節賞析與心態變化
+                </h3>
+                <p id="stepAnalysis" class="text-stone-700 text-sm leading-relaxed">
+                    父親黑布大馬褂與深青布棉袍，展現喪事期間的莊重與家境落寞。父親身材肥胖，走路本就步履蹣跚，卻依然堅持為長大的兒子奔波。
+                </p>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: TEXT ANNOTATIONS ==================== -->
+        <section id="tab-text" class="tab-content hidden fade-in space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-stone-200">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-stone-200 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-stone-900">經典片段精讀與交互賞析</h2>
+                        <p class="text-stone-500 text-xs sm:text-sm sans-font mt-1">點擊下方不同標籤，或在文章中點擊螢光畫線文字，查看細膩手法拆解。</p>
+                    </div>
+
+                    <!-- Filter Toggles -->
+                    <div class="flex flex-wrap gap-2 sans-font text-xs">
+                        <button onclick="filterAnnotations('all')" class="anno-filter-btn px-3 py-1.5 rounded-full bg-stone-800 text-white">全部顯示</button>
+                        <button onclick="filterAnnotations('action')" class="anno-filter-btn px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-300">精妙動詞</button>
+                        <button onclick="filterAnnotations('color')" class="anno-filter-btn px-3 py-1.5 rounded-full bg-orange-100 text-orange-800 border border-orange-300">色彩對比</button>
+                        <button onclick="filterAnnotations('emotion')" class="anno-filter-btn px-3 py-1.5 rounded-full bg-purple-100 text-purple-800 border border-purple-300">心態流轉</button>
+                        <button onclick="filterAnnotations('symbol')" class="anno-filter-btn px-3 py-1.5 rounded-full bg-green-100 text-green-800 border border-green-300">象徵意義</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Text Reading Panel -->
+                    <div class="lg:col-span-2 space-y-6 text-stone-800 text-base sm:text-lg leading-loose font-serif bg-amber-50/40 p-6 rounded-xl border border-amber-100 custom-scrollbar max-h-[550px] overflow-y-auto">
+                        
+                        <p>
+                            我說道：「爸爸，你走吧。」他往車外看了看說：「我買幾個橘子去。你就在此地，不要走動。」我看那邊月台的柵欄外有幾個賣東西的等著顧客。走到那邊月台，須穿過鐵道，須<span class="highlight-action anno-item anno-action" onclick="showAnnoNotice('探、穿、爬', '精確動詞描寫：連用「探」、「穿」、「爬」等動詞，寫出肥胖的父親穿越鐵道時的艱辛。')">探身下去，穿過鐵道</span>，再<span class="highlight-action anno-item anno-action" onclick="showAnnoNotice('攀、縮、傾', '精妙動詞：攀字凸顯月台之高與父親身軀之沉重，傾字寫出全身力量集中於上半身的艱難動作。')">攀爬上去</span>。
+                        </p>
+
+                        <p>
+                            父親是一個胖子，走過去自然要費事些。我本來要去的，他不肯，只好讓他去。我看見他戴著黑布小帽，穿著<span class="highlight-color anno-item anno-color" onclick="showAnnoNotice('黑布大馬褂、深青布棉袍', '視覺色彩描寫：暗沉的黑色與深青色，營造出喪事過後的沉重背景與落寞心境。')">黑布大馬褂，深青布棉袍</span>，步履蹣跚地走到鐵道邊，慢慢<span class="highlight-action anno-item anno-action" onclick="showAnnoNotice('探身下', '動詞探：表現身軀肥胖、行動不便時試探著下坡的艱難。')">探身下去</span>，尚不大難。可是他穿過鐵道，要爬上那邊月台，就不容易了。
+                        </p>
+
+                        <p>
+                            他用兩手<span class="highlight-action anno-item anno-action" onclick="showAnnoNotice('攀著月台', '動詞攀：凸顯父親手部用力抓握月台邊緣的吃力。')">攀著上面</span>，兩腳再向上<span class="highlight-action anno-item anno-action" onclick="showAnnoNotice('縮', '動詞縮：將肥胖的雙腿向上收縮，生動展現全身發力的體態。')">縮</span>；他肥胖的身子向左<span class="highlight-action anno-item anno-action" onclick="showAnnoNotice('微傾', '動詞傾：身體傾斜，顯現出極大的體力消耗與艱難。')">微傾</span>，顯出努力的樣子，這時我看見他的背影，我的<span class="highlight-emotion anno-item anno-emotion" onclick="showAnnoNotice('淚很快地流下來了', '第一流淚：被父親至深無私的愛深深震撼，自責與感動交織。')">眼淚很快地流下來了</span>。我感緊拭乾了淚。怕他看見，也怕別人看見。
+                        </p>
+
+                        <p>
+                            我再往外看時，他已抱了<span class="highlight-color anno-item anno-color" onclick="showAnnoNotice('朱紅的橘子', '色彩對比與象徵：鮮豔的朱紅橘子，與父親一身暗沉青黑衣著形成強烈視覺對比，象徵著父親給予兒子的溫暖與希望。')"><span class="highlight-symbol anno-item anno-symbol">朱紅的橘子</span></span>往回走了。過鐵道時，他先將橘子散放在地上，自己慢慢爬下，再抱起橘子走。到這邊時，我趕緊去抱他。他和我走到車上，將橘子一股腦兒放在我的皮大衣上。撲撲衣上的泥土，心裡很輕鬆似的。過一會說：「<span class="highlight-emotion anno-item anno-emotion" onclick="showAnnoNotice('我走了，到那邊信！', '樸實言語：父親言語極為簡短樸實，卻無微不至地關懷兒子的安全。')">我走了，到那邊寫信！</span>」我望著他出去。他走了幾步，回過頭看見我，說：「<span class="highlight-emotion anno-item anno-emotion" onclick="showAnnoNotice('進去吧，裡邊有人。', '再次囑咐：即便離去仍心繫車內行李與兒子安全。')">進去吧，裡邊有人。</span>」
+                        </p>
+
+                        <p>
+                            等他的背影混入來來往往的人群裡，再找不著了，我坐進來，<span class="highlight-emotion anno-item anno-emotion" onclick="showAnnoNotice('眼淚又來了', '第二流淚：離別之際的深深依戀、自責與對未來的茫然思念。')">我的眼淚又來了</span>。
+                        </p>
+                    </div>
+
+                    <!-- Annotation Explanatory Panel -->
+                    <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center space-x-2 text-amber-800 font-bold mb-3">
+                                <i class="fa-solid fa-lightbulb text-lg"></i>
+                                <span>賞析解析面板</span>
+                            </div>
+                            <div id="annoNoticeTitle" class="text-base font-bold text-stone-900 mb-2">
+                                點擊文章中的彩線文字
+                            </div>
+                            <p id="annoNoticeContent" class="text-stone-600 text-sm leading-relaxed sans-font">
+                                請在左側文章中點擊高亮字詞，此處將實時解析朱自清先生的寫作技巧、文字質感與情感表達。
+                            </p>
+                        </div>
+
+                        <!-- Technique Summary Legend -->
+                        <div class="mt-6 pt-4 border-t border-stone-200 text-xs space-y-2 sans-font text-stone-500">
+                            <div class="font-bold text-stone-700">寫作特色簡要提煉：</div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded bg-yellow-400 inline-block"></span>
+                                <span><b>動詞描寫：</b> 探、穿、攀、縮、傾——白描刻畫動態艱辛</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded bg-orange-400 inline-block"></span>
+                                <span><b>色彩對比：</b> 黑布大馬褂/青布棉袍 vs. 朱紅橘子</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded bg-purple-400 inline-block"></span>
+                                <span><b>心境演變：</b> 年少自恃聰明 → 體會父愛後流淚愧疚</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded bg-green-400 inline-block"></span>
+                                <span><b>核心象徵：</b> 「背影」與「橘子」成為父愛具象化載體</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: EMOTION & THEMES ==================== -->
+        <section id="tab-emotion" class="tab-content hidden fade-in space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-stone-200">
+                <h2 class="text-2xl font-bold text-stone-900 mb-2">父子情感圖譜與心境演變</h2>
+                <p class="text-stone-500 text-sm mb-6 sans-font">文章不僅是父親愛的展示，更是兒子從「傲慢自聰明」到「理解愧疚」的心靈覺醒。</p>
+
+                <!-- Mindset Evolution Cards -->
+                <div class="relative border-l-2 border-amber-300 ml-4 pl-6 space-y-8 my-6">
+                    
+                    <!-- Stage 1 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-white shadow"></div>
+                        <div class="bg-stone-50 p-5 rounded-xl border border-stone-200 shadow-sm">
+                            <span class="px-2 py-0.5 bg-stone-200 text-stone-700 text-xs font-bold rounded sans-font">階段一：自恃聰明與輕慢</span>
+                            <h3 class="text-lg font-bold text-stone-800 mt-2 mb-1">「那時真是太聰明了」</h3>
+                            <p class="text-stone-600 text-sm leading-relaxed">
+                                20歲的朱自清已是北京大學學生，自認思想新潮。在火車站時，嫌棄父親與腳夫講價「說話不漂亮」，總覺父親舉止迂腐，心心念念想著「我自己能照顧自己」。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Stage 2 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-orange-500 border-4 border-white shadow"></div>
+                        <div class="bg-orange-50/60 p-5 rounded-xl border border-orange-200 shadow-sm">
+                            <span class="px-2 py-0.5 bg-orange-200 text-orange-800 text-xs font-bold rounded sans-font">階段二：震撼與第一次流淚</span>
+                            <h3 class="text-lg font-bold text-stone-800 mt-2 mb-1">目睹背影·淚水奔湧</h3>
+                            <p class="text-stone-600 text-sm leading-relaxed">
+                                當看見肥胖的父親為了買橘子，穿著笨重的衣袍艱難地攀爬月台、身子微傾之際，所有的自傲瞬間瓦解。作者第一次真正意識到父親衰老與深沉的愛，愧疚與感動化為淚水。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Stage 3 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-purple-600 border-4 border-white shadow"></div>
+                        <div class="bg-purple-50/60 p-5 rounded-xl border border-purple-200 shadow-sm">
+                            <span class="px-2 py-0.5 bg-purple-200 text-purple-800 text-xs font-bold rounded sans-font">階段三：離別與第二次流淚</span>
+                            <h3 class="text-lg font-bold text-stone-800 mt-2 mb-1">背影消失於人群·深切依戀</h3>
+                            <p class="text-stone-600 text-sm leading-relaxed">
+                                父親留下橘子，交代完囑咐，步履蹣跚地離去。當背影混入人群再也看不見時，作者再次流淚。這是不捨的淚，更是體會到世事艱難與父愛不易後的成熟之淚。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Stage 4 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-stone-800 border-4 border-white shadow"></div>
+                        <div class="bg-stone-900 text-stone-100 p-5 rounded-xl shadow-md">
+                            <span class="px-2 py-0.5 bg-amber-500/30 text-amber-300 text-xs font-bold rounded sans-font">階段四：八年後的懷念與理解 (1925)</span>
+                            <h3 class="text-lg font-bold text-amber-100 mt-2 mb-1">晶瑩的淚光中，再考背影</h3>
+                            <p class="text-stone-300 text-sm leading-relaxed">
+                                八年過去，作者亦已為人父，歷經生活磨難。收到父親「大行將導，老境頹唐」的家信，晚年的父親脾氣漸軟。在晶瑩的淚光中，浦口車站的背影再次浮現，達到精神上的完全理解與和解。
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Four Times "Back View" Mentioned in Essay -->
+            <div class="bg-stone-100 p-6 rounded-2xl border border-stone-200">
+                <h3 class="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-bookmark text-amber-700"></i> 全文四次出現「背影」的深刻作用
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sans-font text-xs sm:text-sm">
+                    <div class="bg-white p-4 rounded-xl border border-stone-200">
+                        <span class="font-bold text-amber-800 block mb-1">1. 開篇點題之背影</span>
+                        <p class="text-stone-600">「我最不能忘記的是他的背影。」—— 點明主題，營造懷念與傷感的感情基調。</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-stone-200">
+                        <span class="font-bold text-amber-800 block mb-1">2. 買橘刻畫之背影</span>
+                        <p class="text-stone-600">「攀爬月台，顯出努力的樣子」—— 詳寫特寫，最具震撼力，凝聚全書父愛核心。</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-stone-200">
+                        <span class="font-bold text-amber-800 block mb-1">3. 告別離去之背影</span>
+                        <p class="text-stone-600">「等他的背影混入人群」—— 略寫離去，表達惜別與無限依依不捨之情。</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-stone-200">
+                        <span class="font-bold text-amber-800 block mb-1">4. 結尾照應之背影</span>
+                        <p class="text-stone-600">「在晶瑩的淚光中，又看見那肥胖的、青布棉袍黑布馬褂的背影」—— 首尾呼應，深化懷念與思念。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: REAL HISTORY ==================== -->
+        <section id="tab-history" class="tab-content hidden fade-in space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-stone-200">
+                <h2 class="text-2xl font-bold text-stone-900 mb-2">真實歷史背景與父子和解</h2>
+                <p class="text-stone-500 text-sm mb-6 sans-font">文學作品背後，是一段真實而複雜的新舊時代父子衝突與晚年和解歷史。</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-amber-50 border border-amber-200">
+                            <h3 class="font-bold text-stone-800 text-base mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-house-chimney-crack text-amber-700"></i> 家道中落與 1917 悲劇
+                            </h3>
+                            <p class="text-stone-600 text-sm leading-relaxed">
+                                父親朱鴻鈞（字小坡）曾在徐州擔任煙酒公賣局局長。1917年因納妾風波導致家庭變故並失業，隨後朱自清的祖母在揚州去世。父子二人由北京與徐州奔喪回家，辦完喪事後變賣家產還債，家中一片狼藉。
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-stone-50 border border-stone-200">
+                            <h3 class="font-bold text-stone-800 text-base mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-scale-unbalanced text-stone-700"></i> 新舊觀念的父子隔閡
+                            </h3>
+                            <p class="text-stone-600 text-sm leading-relaxed">
+                                朱鴻鈞性格家長制強烈，習慣支配家庭。朱自清北大畢業後任教，父親曾私自截留朱自清的薪水，導致父子關係極度緊張。朱自清曾數年不回家，父子冷戰不相往來。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-purple-50 border border-purple-200">
+                            <h3 class="font-bold text-stone-800 text-base mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-envelope-open-text text-purple-700"></i> 1925 創作契機：父親來信
+                            </h3>
+                            <p class="text-stone-600 text-sm leading-relaxed">
+                                1925年，朱自清在北京清華大學任教時，收到父親信件：「我身體平安，惟膀子疼痛厲害，舉箸提筆，各有不便，大行將導，當不在遠矣。」讀信後，朱自清百感交集，回想起八年前浦口送別，寫下了《背影》。
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-green-50 border border-green-200">
+                            <h3 class="font-bold text-stone-800 text-base mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-heart-circle-check text-green-700"></i> 1928 年的終極和解
+                            </h3>
+                            <p class="text-stone-600 text-sm leading-relaxed">
+                                據朱自清三弟朱國華回憶：1928年，散文集《背影》出版。家人將書拿到揚州給老父親看。行動不便的老父親戴著老花鏡，手顫抖著讀完全文，眼角泛起淚光。這篇散文終於冰釋了多年的父子心結。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 6: QUIZ & REFLECTION ==================== -->
+        <section id="tab-quiz" class="tab-content hidden fade-in space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-stone-200 max-w-3xl mx-auto">
+                <div class="text-center mb-8">
+                    <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs rounded-full font-bold sans-font">互動小測驗</span>
+                    <h2 class="text-2xl font-bold text-stone-900 mt-2">《背影》文學理解與細節考驗</h2>
+                    <p class="text-stone-500 text-sm sans-font mt-1">通過 3 道題，測試你對文中細節與寫作手法的理解。</p>
+                </div>
+
+                <div id="quizContainer" class="space-y-6">
+                    <!-- Quiz Item 1 -->
+                    <div class="q-card bg-stone-50 p-5 rounded-xl border border-stone-200">
+                        <p class="font-bold text-stone-800 text-base mb-3">1. 文章開頭「我最不能忘記的是他的背影」，在全篇寫作結構中扮演什麼作用？</p>
+                        <div class="space-y-2 sans-font text-sm">
+                            <button onclick="checkAnswer(this, false, 'q1')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">A. 點明買橘子的具體地點</button>
+                            <button onclick="checkAnswer(this, true, 'q1')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">B. 開篇點題，開門見山奠定感情基調，引出回憶</button>
+                            <button onclick="checkAnswer(this, false, 'q1')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">C. 總結父親一生的功過成就</button>
+                        </div>
+                        <div class="q-feedback hidden mt-3 p-3 rounded text-xs leading-relaxed"></div>
+                    </div>
+
+                    <!-- Quiz Item 2 -->
+                    <div class="q-card bg-stone-50 p-5 rounded-xl border border-stone-200">
+                        <p class="font-bold text-stone-800 text-base mb-3">2. 父親買橘子時，作者寫到橘子是「朱紅的」，而父親穿的是「黑布大馬褂、深青布棉袍」，這種視覺色彩對比有何妙處？</p>
+                        <div class="space-y-2 sans-font text-sm">
+                            <button onclick="checkAnswer(this, false, 'q2')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">A. 說明火車站的水果攤種類繁多</button>
+                            <button onclick="checkAnswer(this, true, 'q2')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">B. 以朱紅橘子的鮮明溫暖，對比衣著青黑的暗沉悲涼，象徵深沉父愛給予的溫暖</button>
+                            <button onclick="checkAnswer(this, false, 'q2')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">C. 強調作者對色彩搭配有極高的鑑賞力</button>
+                        </div>
+                        <div class="q-feedback hidden mt-3 p-3 rounded text-xs leading-relaxed"></div>
+                    </div>
+
+                    <!-- Quiz Item 3 -->
+                    <div class="q-card bg-stone-50 p-5 rounded-xl border border-stone-200">
+                        <p class="font-bold text-stone-800 text-base mb-3">3. 文中作者兩次提到「那時真是太聰明了」，句中的「聰明」屬於什麼修辭與心態？</p>
+                        <div class="space-y-2 sans-font text-sm">
+                            <button onclick="checkAnswer(this, true, 'q3')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">A. 反語修辭，表達對當年自恃新潮、忽視父爱的懊悔與自責</button>
+                            <button onclick="checkAnswer(this, false, 'q3')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">B. 自誇修辭，讚揚自己當時考上北京大學的智商</button>
+                            <button onclick="checkAnswer(this, false, 'q3')" class="w-full text-left p-3 rounded-lg border bg-white hover:bg-stone-100 text-stone-700 transition">C. 幽默修辭，純粹為了增加文采趣致</button>
+                        </div>
+                        <div class="q-feedback hidden mt-3 p-3 rounded text-xs leading-relaxed"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 text-xs sm:text-sm py-6 border-t border-stone-800 sans-font">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="text-stone-300 font-serif">朱自清《背影》 互動文學探索專題</p>
+            <p class="text-stone-500 text-xs">寫於1925年10月 · 回憶1917年冬浦口送別 · 中國現代散文經典</p>
+        </div>
+    </footer>
+
+    <!-- Application Logic Script -->
+    <script>
+        // Audio & Tone.js state
+        let audioEnabled = false;
+        let synth = null;
+
+        function initAudio() {
+            if (!synth && typeof Tone !== 'undefined') {
+                synth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.1, decay: 0.2, sustain: 0.5, release: 1 }
+                }).toDestination();
+                synth.volume.value = -12;
+            }
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const icon = document.getElementById('soundIcon');
+            if (audioEnabled) {
+                Tone.start();
+                initAudio();
+                icon.className = 'fa-solid fa-volume-high text-amber-400 text-lg';
+                playToneNote('C4');
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-lg';
+            }
+        }
+
+        function playToneNote(note = 'E4') {
+            if (audioEnabled && synth) {
+                try {
+                    synth.triggerAttackRelease(note, "8n");
+                } catch(e) {}
+            }
+        }
+
+        // Instagram Profile Interactive Logic
+        let isFollowing = false;
+        function toggleIgFollow() {
+            isFollowing = !isFollowing;
+            const btn = document.getElementById('igFollowBtn');
+            if (isFollowing) {
+                btn.className = 'px-5 py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 font-semibold rounded-lg transition';
+                btn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> 已追蹤';
+                playToneNote('C5');
+            } else {
+                btn.className = 'px-5 py-2 bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-lg shadow transition';
+                btn.innerHTML = '<i class="fa-solid fa-user-plus mr-1"></i> 追蹤';
+                playToneNote('G4');
+            }
+        }
+
+        function shareProfile() {
+            playToneNote('E4');
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = window.location.href;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            alert('已複製朱自清 IG 主頁連結！');
+        }
+
+        const igPostsData = {
+            'post-1': {
+                date: '1925.10.15 · 北京清華園',
+                title: '《背影》的誕生',
+                quote: '「我與父親不相見已有二年餘了，我最不能忘記的是他的背影。」',
+                tag: '📍 南京浦口車站 · 津浦鐵路',
+                bgClass: 'bg-gradient-to-br from-amber-900 via-stone-900 to-amber-950',
+                caption: '寫於1925年秋清華大學。回憶1917年深冬祖母去世、父親失業，浦口車站送別的場景。父親穿著黑布大馬褂、深青布棉袍，艱難攀爬月台買橘子的背影，成了中國現代文學史上最經典的父愛符號。',
+                likes: '98,240'
+            },
+            'post-2': {
+                date: '1920 · 北京大學',
+                title: '五四新文化與北大',
+                quote: '「用真摯白話替代陳腐文言，賦予現代散文生命力。」',
+                tag: '📍 北京大學哲學系',
+                bgClass: 'bg-gradient-to-br from-slate-800 via-indigo-950 to-stone-900',
+                caption: '朱自清1920年畢業於國立北京大學哲學系。在五四運動浪潮中，他積極創作新詩與白話散文，與葉聖陶、聖陶等成立文學研究會，主張「為人生」的文學。',
+                likes: '45,120'
+            },
+            'post-3': {
+                date: '1898 - 1916 · 揚州',
+                title: '揚州風土與文學養分',
+                quote: '「生於江蘇東海，長於揚州，自稱揚州人。」',
+                tag: '📍 江蘇揚州',
+                bgClass: 'bg-gradient-to-br from-emerald-900 via-teal-950 to-stone-900',
+                caption: '揚州的秀麗風光與深厚文化底蘊，賦予朱自清細緻敏感的審美眼光。他在揚州完成中學學業，這段歲月深刻塑造了他的性格與散文風格。',
+                likes: '32,800'
+            },
+            'post-4': {
+                date: '1927.07 · 清華園',
+                title: '《荷塘月色》',
+                quote: '「這幾天心裡頗不寧靜。今晚在院子裡坐著乘涼，忽然想起日日走過的荷塘……」',
+                tag: '📍 清華大學荷花池',
+                bgClass: 'bg-gradient-to-br from-teal-900 via-stone-900 to-slate-900',
+                caption: '1927年大革命失敗後，朱自清以絕美的筆調描繪清華園夜晚的荷塘月色。巧妙運用通感與色彩修辭，成為現代抒情散文不可逾越的巔峰。',
+                likes: '88,900'
+            },
+            'post-5': {
+                date: '1922.03 · 時間哲思',
+                title: '《匆匆》',
+                quote: '「燕子去了，有再再來的時候；楊柳枯了，有再再青的時候……但是，聰明的，你告訴我，我們的日子為什麼一去不復返呢？」',
+                tag: '📍 浙江溫州',
+                bgClass: 'bg-gradient-to-br from-rose-950 via-purple-950 to-stone-900',
+                caption: '《匆匆》探討生命的短暫與時間流逝。文字富於音樂節奏感與詩意，感動了一代又一代對時光有所體悟的讀者。',
+                likes: '76,400'
+            },
+            'post-6': {
+                date: '1948 · 民族風骨',
+                title: '知識份子的骨氣',
+                quote: '「寧可挨餓，決不領取帶有侮辱性質的美國救濟糧。」',
+                tag: '📍 北平',
+                bgClass: 'bg-gradient-to-br from-stone-900 via-amber-950 to-stone-950',
+                caption: '晚年的朱自清貧病交迫，仍毅然在《抗議美國扶日政策並拒絕領取美援麵粉宣言》上簽名。毛澤東曾盛讚他「表現了我們民族的英雄氣概」。',
+                likes: '120,500'
+            }
+        };
+
+        let currentModalPostId = null;
+        let isModalLiked = false;
+
+        function openIgPost(postId) {
+            playToneNote('G4');
+            const post = igPostsData[postId];
+            if (!post) return;
+
+            currentModalPostId = postId;
+            isModalLiked = false;
+
+            document.getElementById('modalPostDate').innerText = post.date;
+            document.getElementById('modalPostTitle').innerText = post.title;
+            document.getElementById('modalPostQuote').innerText = post.quote;
+            document.getElementById('modalPostTag').innerText = post.tag;
+            document.getElementById('modalPostLocation').innerText = post.tag.replace('📍 ', '');
+            document.getElementById('modalPostCaption').querySelector('span:nth-child(2)').innerText = post.caption;
+            document.getElementById('modalLikesCount').innerText = `讚數：${post.likes} 次`;
+
+            const visualBox = document.getElementById('igModalVisual');
+            visualBox.className = `w-full md:w-1/2 p-8 text-white flex flex-col justify-between min-h-[250px] relative ${post.bgClass}`;
+
+            const heartIcon = document.getElementById('modalHeartIcon');
+            heartIcon.className = 'fa-regular fa-heart';
+
+            document.getElementById('igModal').classList.remove('hidden');
+        }
+
+        function closeIgModal() {
+            playToneNote('E4');
+            document.getElementById('igModal').classList.add('hidden');
+        }
+
+        function toggleModalLike() {
+            isModalLiked = !isModalLiked;
+            const heartIcon = document.getElementById('modalHeartIcon');
+            if (isModalLiked) {
+                heartIcon.className = 'fa-solid fa-heart text-rose-500';
+                playToneNote('C5');
+            } else {
+                heartIcon.className = 'fa-regular fa-heart text-stone-700';
+            }
+        }
+
+        function openIgStory() {
+            openIgPost('post-1');
+        }
+
+        // Tab Switcher
+        function switchTab(tabId) {
+            playToneNote('G4');
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            const target = document.getElementById(tabId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update Nav styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = 'nav-btn px-3 py-2 rounded-lg transition-colors hover:bg-stone-800 text-stone-300';
+            });
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = 'nav-btn px-3 py-2 rounded-lg transition-colors bg-amber-800/60 text-amber-200';
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Interactive Scene Data
+        const sceneSteps = [
+            {
+                badge: '一',
+                title: '叮嚀與決定：父親堅持親自前往',
+                desc: '父親穿著黑布大馬褂、深青布棉袍。本已僱好腳夫，卻仍不放心，執意要穿過鐵道去對面月台買橘子。「我買幾個橘子去。你就在此地，不要走動。」',
+                left: '15%',
+                bottom: '20px',
+                icon: 'fa-user-tie',
+                time: '步驟 1 / 4：車廂叮嚀',
+                analysis: '【細節賞析】父親黑布大馬褂與深青布棉袍，展現喪事期間的莊重與家境落寞。父親身材肥胖，走路本就步履蹣跚，卻依然堅持為長大的兒子奔波。'
+            },
+            {
+                badge: '二',
+                title: '穿越鐵道：步履蹣跚下月台',
+                desc: '父親走到鐵道邊，慢慢探身下去。肥胖的身軀試探著走下陡坡，動作雖然緩慢，卻展現出無微不至的關愛。',
+                left: '42%',
+                bottom: '8px',
+                icon: 'fa-person-walking',
+                time: '步驟 2 / 4：探身下鐵道',
+                analysis: '【動詞賞析】「探」字白描描繪出肥胖身軀下坡時的謹慎與艱難，展現父親不顧體力負擔的愛。'
+            },
+            {
+                badge: '三',
+                title: '攀爬月台：最震撼的背影特寫',
+                desc: '父親兩手攀著上面，兩腳向上縮；肥胖的身子向左微傾，顯出努力的樣子。車廂內的作者看到這一幕，眼淚很快地流了下來。',
+                left: '70%',
+                bottom: '38px',
+                icon: 'fa-person-arrow-up-from-line',
+                time: '步驟 3 / 4：攀爬對面月台',
+                analysis: '【核心高潮】「攀、縮、傾」連續三個高難度動作描寫，將全身力量集中於雙手雙腳，作者在這一刻徹底被父愛擊中流淚。'
+            },
+            {
+                badge: '四',
+                title: '抱橘歸來：心裡輕鬆與依依告別',
+                desc: '父親抱著朱紅的橘子歸來，散放在皮大衣上，撲撲泥土，心裡很輕鬆似的。囑咐「我走了，到那邊寫信！」後混入人群離去。',
+                left: '25%',
+                bottom: '20px',
+                icon: 'fa-basket-shopping',
+                time: '步驟 4 / 4：離別與思念',
+                analysis: '【情感昇華】「撲撲泥土，心裡很輕鬆似的」寫出父親為兒子做完小事後的滿足感。言語簡短卻無比深情。'
+            }
+        ];
+
+        let currentSceneStep = 0;
+
+        function setSceneStep(stepIdx) {
+            currentSceneStep = stepIdx;
+            const data = sceneSteps[stepIdx];
+
+            // Update DOM Elements
+            document.getElementById('stepBadge').innerText = data.badge;
+            document.getElementById('stepTitle').innerText = data.title;
+            document.getElementById('stepDesc').innerText = data.desc;
+            document.getElementById('sceneTime').innerText = data.time;
+            document.getElementById('stepIndicator').innerText = `步驟 ${stepIdx + 1} / 4`;
+            document.getElementById('stepAnalysis').innerText = data.analysis;
+
+            // Move Avatar
+            const father = document.getElementById('fatherAvatar');
+            father.style.left = data.left;
+            father.style.bottom = data.bottom;
+
+            document.getElementById('fatherIcon').className = `text-2xl text-amber-400 filter drop-shadow-md animate-bounce fa-solid ${data.icon}`;
+
+            // Button highlights
+            const buttons = document.querySelectorAll('.step-btn');
+            buttons.forEach((btn, idx) => {
+                if (idx === stepIdx) {
+                    btn.className = 'step-btn text-left p-3 rounded-xl border bg-amber-900/40 border-amber-600/50 text-amber-200';
+                } else {
+                    btn.className = 'step-btn text-left p-3 rounded-xl border bg-stone-800/60 border-stone-700 text-stone-300 hover:bg-stone-800';
+                }
+            });
+
+            // Nav buttons disable check
+            document.getElementById('prevStepBtn').disabled = (stepIdx === 0);
+            document.getElementById('nextStepBtn').disabled = (stepIdx === sceneSteps.length - 1);
+
+            playToneNote('E4');
+        }
+
+        function changeSceneStep(dir) {
+            const next = currentSceneStep + dir;
+            if (next >= 0 && next < sceneSteps.length) {
+                setSceneStep(next);
+            }
+        }
+
+        // Annotation Notice Display
+        function showAnnoNotice(title, text) {
+            playToneNote('A4');
+            document.getElementById('annoNoticeTitle').innerText = title;
+            document.getElementById('annoNoticeContent').innerText = text;
+        }
+
+        function filterAnnotations(type) {
+            playToneNote('C5');
+            const items = document.querySelectorAll('.anno-item');
+            items.forEach(el => {
+                if (type === 'all') {
+                    el.style.opacity = '1';
+                } else if (el.classList.contains('anno-' + type)) {
+                    el.style.opacity = '1';
+                } else {
+                    el.style.opacity = '0.35';
+                }
+            });
+
+            // Update filter button styling
+            const filterBtns = document.querySelectorAll('.anno-filter-btn');
+            filterBtns.forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-amber-500');
+            });
+            event.target.classList.add('ring-2', 'ring-amber-500');
+        }
+
+        // Quiz Feedback Handler
+        function checkAnswer(btnElement, isCorrect, qId) {
+            playToneNote(isCorrect ? 'C5' : 'G3');
+            const parent = btnElement.closest('.q-card');
+            const feedback = parent.querySelector('.q-feedback');
+            const buttons = parent.querySelectorAll('button');
+
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:bg-stone-100');
+            });
+
+            feedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                btnElement.classList.add('bg-green-100', 'border-green-500', 'text-green-900', 'font-bold');
+                feedback.className = 'q-feedback mt-3 p-3 rounded text-xs leading-relaxed bg-green-100 text-green-800 border border-green-300';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check mr-1 text-green-600"></i> <b>回答正確！</b> 洞察敏銳，完全理解了文章精髓。';
+            } else {
+                btnElement.classList.add('bg-red-100', 'border-red-500', 'text-red-900');
+                feedback.className = 'q-feedback mt-3 p-3 rounded text-xs leading-relaxed bg-amber-50 text-amber-900 border border-amber-300';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-info mr-1 text-amber-600"></i> <b>再思考看看：</b> 正確答案為選項，這展現了朱自清白描寫作與深層情感流露的功力。';
+            }
+        }
+
+        // Initialize on Load
+        window.onload = function() {
+            setSceneStep(0);
+        };
+    </script>
+</body>
+</html>
